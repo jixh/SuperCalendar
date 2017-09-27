@@ -32,4 +32,13 @@ public class Week {
     public void setDays(Day[] days) {
         this.days = days;
     }
+
+    public boolean containDay(Day day){
+        for (Day d:days)
+            if (d.equals(days)){
+                return true;
+            }
+
+        return false;
+    }
 }

@@ -12,6 +12,7 @@ import com.ldf.calendar.Utils;
 import com.ldf.calendar.view.MonthPager;
 import com.ldf.calendar.model.CalendarDate;
 import com.ldf.calendar.view.Calendar;
+import com.ldf.calendar.view.Week;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,6 +22,8 @@ public class CalendarViewAdapter extends PagerAdapter {
     //0:代表周一显示为本周的第一天
     public static int weekArrayType = 0;
     private static CalendarDate date = new CalendarDate();
+    private static Week selectWeek = new Week(0);
+    private static int selectRow = 0;
     private ArrayList<Calendar> calendars = new ArrayList<>();
     private int currentPosition;
     private CalendarAttr.CalendayType calendarType = CalendarAttr.CalendayType.MONTH;
@@ -75,6 +78,7 @@ public class CalendarViewAdapter extends PagerAdapter {
             CalendarDate current = seedDate.modifyMonth(position - MonthPager.CURRENT_DAY_INDEX);
             current.setDay(1);//每月的种子日期都是1号
             calendar.showDate(current);
+            calendar.updateSelectWeek(selectWeek,selectRow);
         } else {
             CalendarDate current = seedDate.modifyWeek(position - MonthPager.CURRENT_DAY_INDEX);
             if (weekArrayType == 1) {
@@ -127,6 +131,8 @@ public class CalendarViewAdapter extends PagerAdapter {
             calendar.update();
             if (calendar.getCalendarType() == CalendarAttr.CalendayType.WEEK) {
                 calendar.updateWeek(rowCount);
+            }else {
+                calendar.updateSelectWeek(selectWeek,selectRow);
             }
         }
     }
@@ -247,6 +253,22 @@ public class CalendarViewAdapter extends PagerAdapter {
 
     public static CalendarDate loadDate() {
         return date;
+    }
+
+    public static Week getSelectWeek() {
+        return selectWeek;
+    }
+
+    public static void setSelectWeek(Week selectWeek) {
+        CalendarViewAdapter.selectWeek = selectWeek;
+    }
+
+    public static int getSelectRow() {
+        return selectRow;
+    }
+
+    public static void setSelectRow(int selectRow) {
+        CalendarViewAdapter.selectRow = selectRow;
     }
 
     public CalendarAttr.CalendayType getCalendarType() {

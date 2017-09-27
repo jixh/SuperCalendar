@@ -85,8 +85,14 @@ public class Calendar extends View {
                 if (Math.abs(disX) < touchSlop && Math.abs(disY) < touchSlop) {
                     int col = (int) (posX / cellWidth);
                     int row = (int) (posY / cellHeight);
+
                     onAdapterSelectListener.cancelSelectState();
+
+                    renderer.onClickWeek(col,row);
+
                     renderer.onClickDate(col, row);
+
+
                     onAdapterSelectListener.updateSelectState();
                     invalidate();
                 }
@@ -130,6 +136,11 @@ public class Calendar extends View {
 
     public void updateWeek(int rowCount) {
         renderer.updateWeek(rowCount);
+        invalidate();
+    }
+
+    public void updateSelectWeek(Week selectWeek,int row) {
+        renderer.updateSelectWeek(selectWeek,row);
         invalidate();
     }
 

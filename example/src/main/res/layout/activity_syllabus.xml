@@ -72,27 +72,12 @@
                 android:textSize="14sp"/>
 
                 <TextView
-                    android:id="@+id/scroll_switch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="24dp"
-                    android:paddingLeft="4dp"
-                    android:paddingRight="4dp"
-                    android:layout_toLeftOf="@id/back_today_button"
-                    android:layout_marginRight="8dp"
-                    android:layout_centerVertical="true"
-                    android:background="@drawable/button_bg"
-                    android:text="切换周月"
-                    android:gravity="center"
-                    android:textColor="#ff9c0e"
-                    android:textSize="14sp"/>
-
-                <TextView
                     android:id="@+id/theme_switch"
                     android:layout_width="wrap_content"
                     android:layout_height="24dp"
                     android:paddingLeft="4dp"
                     android:paddingRight="4dp"
-                    android:layout_toLeftOf="@id/scroll_switch"
+                    android:layout_toLeftOf="@id/back_today_button"
                     android:layout_marginRight="8dp"
                     android:layout_centerVertical="true"
                     android:background="@drawable/button_bg"
@@ -106,7 +91,7 @@
                     android:layout_height="24dp"
                     android:paddingLeft="4dp"
                     android:paddingRight="4dp"
-                    android:layout_toLeftOf="@id/scroll_switch"
+                    android:layout_toLeftOf="@id/back_today_button"
                     android:layout_marginRight="8dp"
                     android:layout_centerVertical="true"
                     android:background="@drawable/button_bg"
@@ -120,7 +105,7 @@
                     android:layout_height="24dp"
                     android:paddingLeft="4dp"
                     android:paddingRight="4dp"
-                    android:layout_toLeftOf="@id/scroll_switch"
+                    android:layout_toLeftOf="@id/back_today_button"
                     android:layout_marginRight="8dp"
                     android:layout_centerVertical="true"
                     android:background="@drawable/button_bg"
@@ -157,7 +142,6 @@
                 style="@style/weekIndicatorStyle"
                 android:text="日" />
         </LinearLayout>
-
         <android.support.design.widget.CoordinatorLayout
             android:id="@+id/content"
             android:layout_width="match_parent"
@@ -170,20 +154,6 @@
                 android:layout_height="270dp"
                 android:background="#fff">
             </com.ldf.calendar.view.MonthPager>
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/list"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#ffffff"
-                app:layout_behavior="com.ldf.calendar.behavior.RecyclerViewBehavior"
-                android:layout_gravity="bottom"
-                android:clipToPadding="false"
-                android:clipChildren="false"
-                android:layout_marginBottom="45dp"/>
-            <!-- paddingBottom或者magin距离必须是MonthPager高度的1/6-->
-            <!-- RecyclerView的高度必须是MatchParent-->
-            <!-- RecyclerView的background必须是非透明-->
         </android.support.design.widget.CoordinatorLayout>
     </LinearLayout>
 </LinearLayout>
