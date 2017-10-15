@@ -2,10 +2,13 @@ package com.ldf.calendar.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.view.MotionEvent;
 import android.view.View;
 
 import com.ldf.calendar.Const;
+import com.ldf.calendar.model.Point;
 import com.ldf.calendar.interf.IDayRenderer;
 import com.ldf.calendar.interf.OnAdapterSelectListener;
 import com.ldf.calendar.component.CalendarAttr;
@@ -13,6 +16,7 @@ import com.ldf.calendar.component.CalendarRenderer;
 import com.ldf.calendar.interf.OnSelectDateListener;
 import com.ldf.calendar.model.CalendarDate;
 import com.ldf.calendar.Utils;
+import com.ldf.calendar.utils.DrawSelectHelper;
 
 public class Calendar extends View {
     /**
@@ -29,10 +33,15 @@ public class Calendar extends View {
 
     private OnAdapterSelectListener onAdapterSelectListener;
     private float touchSlop;
+    private Paint circlePaint,rectPaint;
+    private int radius = 20;
+    private int margin = 10;
+    private DrawSelectHelper pointHelper;
 
-    public Calendar(Context context, OnSelectDateListener onSelectDateListener) {
+    public Calendar(Context context, OnSelectDateListener onSelectDateListener,DrawSelectHelper _pointHelper) {
         super(context);
         this.onSelectDateListener = onSelectDateListener;
+        pointHelper = _pointHelper;
         init(context);
     }
 
@@ -40,6 +49,11 @@ public class Calendar extends View {
         this.context = context;
         touchSlop = Utils.getTouchSlop(context);
         initAttrAndRenderer();
+
+        circlePaint = new Paint();
+        circlePaint.setColor(Color.parseColor("#221122"));
+        rectPaint = new Paint();
+        rectPaint.setColor(Color.parseColor("#22290091"));
     }
 
     private void initAttrAndRenderer() {
@@ -54,6 +68,16 @@ public class Calendar extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         renderer.draw(canvas);
+    }
+
+    private void onDrawSelect(Canvas canvas,Point[] points) {
+
+        canvas.drawRect(points[0].x,points[0].y-cellHeight/2+margin,points[3].x,points[3].y+cellHeight/2-margin,rectPaint);
+
+        canvas.drawCircle(points[0].x,points[0].y,radius,circlePaint);
+
+        canvas.drawCircle(points[3].x,points[3].y,radius,circlePaint);
+
     }
 
     @Override
@@ -88,12 +112,10 @@ public class Calendar extends View {
 
                     onAdapterSelectListener.cancelSelectState();
 
-                    renderer.onClickWeek(col,row);
-
                     renderer.onClickDate(col, row);
 
-
                     onAdapterSelectListener.updateSelectState();
+
                     invalidate();
                 }
                 break;

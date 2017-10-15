@@ -66,6 +66,7 @@ public class MonthPager extends ViewPager {
         };
         addOnPageChangeListener(viewPageChangeListener);
         hasPageChangeListener = true;
+
     }
 
     @Override

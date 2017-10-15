@@ -2,15 +2,19 @@ package com.ldf.calendar.component;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.util.Log;
 
 import com.ldf.calendar.Const;
 import com.ldf.calendar.Utils;
 import com.ldf.calendar.interf.IDayRenderer;
 import com.ldf.calendar.interf.OnSelectDateListener;
 import com.ldf.calendar.model.CalendarDate;
+import com.ldf.calendar.utils.DrawSelectHelper;
 import com.ldf.calendar.view.Calendar;
 import com.ldf.calendar.view.Day;
 import com.ldf.calendar.view.Week;
+
+import static com.ldf.calendar.component.CalendarViewAdapter.pointHelper;
 
 /**
  * Created by ldf on 17/6/26.
@@ -24,14 +28,15 @@ public class CalendarRenderer {
     private Context context;
     private OnSelectDateListener onSelectDateListener;    // 单元格点击回调事件
     private CalendarDate seedDate; //种子日期
-    private CalendarDate selectedDate; //被选中的日期
-    private Week selectedWeek; //被选中的周
+    public CalendarDate selectedDate; //被选中的日期
     private int selectedRowIndex = 0;
+    DrawSelectHelper drawSelectHelper;
 
     public CalendarRenderer(Calendar calendar, CalendarAttr attr, Context context) {
         this.calendar = calendar;
         this.attr = attr;
         this.context = context;
+        drawSelectHelper = new DrawSelectHelper();
     }
 
     /**
@@ -40,11 +45,19 @@ public class CalendarRenderer {
      * @return void
      */
     public void draw(Canvas canvas) {
+
+        Log.d(this.getClass().getSimpleName(),"draw");
+
         for (int row = 0; row < Const.TOTAL_ROW; row++) {
             if (weeks[row] != null) {
                 for (int col = 0; col < Const.TOTAL_COL; col++) {
                     if (weeks[row].days[col] != null) {
                         dayRenderer.drawDay(canvas, weeks[row].days[col]);
+                        if (weeks[row].days[col].getState() == State.SELECT){
+                            drawSelectHelper.setPoints(attr.getCellWidth(),attr.getCellHeight());
+                            drawSelectHelper.refreshPoints(col,row);
+                            drawSelectHelper.onDrawSelect(canvas);
+                        }
                     }
                 }
             }
@@ -59,6 +72,7 @@ public class CalendarRenderer {
     public void onClickDate(int col, int row) {
         if (col >= Const.TOTAL_COL || row >= Const.TOTAL_ROW)
             return;
+
         if (weeks[row] != null) {
             if (attr.getCalendarType() == CalendarAttr.CalendayType.MONTH) {
                 if (weeks[row].days[col].getState() == State.CURRENT_MONTH) {
@@ -78,6 +92,9 @@ public class CalendarRenderer {
                     onSelectDateListener.onSelectOtherMonth(1);
                     onSelectDateListener.onSelectDate(selectedDate);
                 }
+
+
+
             } else {
                 weeks[row].days[col].setState(State.SELECT);
                 selectedDate = weeks[row].days[col].getDate();
@@ -111,6 +128,7 @@ public class CalendarRenderer {
                 if (date.equals(CalendarViewAdapter.loadDate())) {
                     weeks[rowIndex].days[i].setState(State.SELECT);
                     weeks[rowIndex].days[i].setDate(date);
+
                 } else {
                     weeks[rowIndex].days[i].setState(State.CURRENT_MONTH);
                     weeks[rowIndex].days[i].setDate(date);
@@ -347,18 +365,4 @@ public class CalendarRenderer {
         this.dayRenderer = dayRenderer;
     }
 
-    public void onClickWeek(int col, int row) {
-        if (col >= Const.TOTAL_COL || row >= Const.TOTAL_ROW)
-            return;
-        if (weeks[row] != null) {
-            if (attr.getCalendarType() == CalendarAttr.CalendayType.MONTH) {
-                selectedWeek = weeks[row];
-                CalendarViewAdapter.setSelectWeek(selectedWeek);
-                CalendarViewAdapter.setSelectRow(row);
-                onSelectDateListener.onSelectWeek(selectedWeek);
-            }else {
-
-            }
-        }
-    }
 }
