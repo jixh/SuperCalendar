@@ -62,6 +62,9 @@ public class CalendarRenderer {
                 }
             }
         }
+
+        if (drawSelectHelper.isAnim())
+        calendar.postInvalidate();
     }
 
     /**
@@ -70,6 +73,7 @@ public class CalendarRenderer {
      * @return void
      */
     public void onClickDate(int col, int row) {
+
         if (col >= Const.TOTAL_COL || row >= Const.TOTAL_ROW)
             return;
 
@@ -92,9 +96,6 @@ public class CalendarRenderer {
                     onSelectDateListener.onSelectOtherMonth(1);
                     onSelectDateListener.onSelectDate(selectedDate);
                 }
-
-
-
             } else {
                 weeks[row].days[col].setState(State.SELECT);
                 selectedDate = weeks[row].days[col].getDate();
@@ -103,6 +104,8 @@ public class CalendarRenderer {
                 seedDate = selectedDate;
             }
         }
+
+        drawSelectHelper.setAnim(true);
     }
 
     /**

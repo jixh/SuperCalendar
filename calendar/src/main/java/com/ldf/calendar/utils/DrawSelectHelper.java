@@ -3,7 +3,6 @@ package com.ldf.calendar.utils;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.util.Log;
 import com.ldf.calendar.model.Point;
 
 /**
@@ -13,11 +12,21 @@ import com.ldf.calendar.model.Point;
 
 public class DrawSelectHelper {
 
+    public static final float MAX = 10;
+
+    private boolean isShow = true;
+
+    private boolean isAnim = false;
+
+    private int during;
+
     private Point[] points = new Point[4];
 
     private int w, h,margin = 10, radius;
 
     private Paint circlePaint,rectPaint;
+
+
 
     public void setPoints(int cellWidth, int cellHeight) {
         w = cellWidth;
@@ -25,14 +34,12 @@ public class DrawSelectHelper {
         radius = cellHeight/2;
 
         circlePaint = new Paint();
-        circlePaint.setColor(Color.parseColor("#221122"));
+        circlePaint.setColor(Color.parseColor("#27221122"));
         rectPaint = new Paint();
         rectPaint.setColor(Color.parseColor("#22290091"));
     }
 
     public void refreshPoints(int col, int row) {
-
-        Log.e("DrawSelectHelper","col = "+col+",row="+row);
 
         int tempH = row * h + h / 2;
 
@@ -40,7 +47,7 @@ public class DrawSelectHelper {
 
         Point pointCenter = new Point(3 * w + w / 2, tempH);
 
-        Point pointSelect = new Point((col - 1) * w + w / 2, tempH);
+        Point pointSelect = new Point(col * w + w / 2, tempH);
 
         Point pointEnd = new Point(6 * w + w / 2, tempH);
 
@@ -52,13 +59,48 @@ public class DrawSelectHelper {
 
     public void onDrawSelect(Canvas canvas) {
 
-        Log.e("DrawSelectHelper","onDrawSelect");
+        if (!isShow)return;
 
-        canvas.drawRect(points[0].x,points[0].y-h/2+margin,points[3].x,points[3].y+h/2-margin,rectPaint);
+        anim(canvas);
 
-        canvas.drawCircle(points[0].x,points[0].y,radius,circlePaint);
+    }
 
-        canvas.drawCircle(points[3].x,points[3].y,radius,circlePaint);
+    private void anim(Canvas canvas) {
+        canvas.drawRect(points[0].x + ((points[2].x - points[0].x)/MAX * (MAX -during)),
+                points[0].y-h/2+margin,
+                points[3].x+ ((points[2].x - points[3].x)/MAX * (MAX -during)),
+                points[3].y+h/2-margin,
+                rectPaint);
+
+        canvas.drawCircle(points[0].x+((points[2].x - points[0].x)/MAX * (MAX -during)),points[0].y,radius,circlePaint);
+
+        canvas.drawCircle(points[3].x+((points[2].x - points[3].x)/MAX * (MAX -during)),points[3].y,radius,circlePaint);
+
+
+        if (during >= MAX){
+            setAnim(false);
+        }else {
+            during++;
+        }
+    }
+
+    public void setShow(boolean show) {
+        isShow = show;
+    }
+
+    public boolean isAnim() {
+        return isAnim;
+    }
+
+    public void setAnim(boolean anim) {
+
+        isAnim = anim;
+
+        if (isAnim){
+            during = 0;
+        }else{
+            during = Float.valueOf(MAX).intValue();
+        }
 
     }
 }
