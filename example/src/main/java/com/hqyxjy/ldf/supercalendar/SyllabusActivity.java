@@ -160,10 +160,7 @@ public class SyllabusActivity extends AppCompatActivity {
             @Override
             public void onSelectDate(CalendarDate date) {
                 refreshClickDate(date);
-            }
 
-            @Override
-            public void onSelectWeek(Week week) {
 
             }
 

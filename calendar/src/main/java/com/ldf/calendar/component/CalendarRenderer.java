@@ -45,18 +45,13 @@ public class CalendarRenderer {
      * @return void
      */
     public void draw(Canvas canvas) {
-
-        Log.d(this.getClass().getSimpleName(),"draw");
-
         for (int row = 0; row < Const.TOTAL_ROW; row++) {
             if (weeks[row] != null) {
                 for (int col = 0; col < Const.TOTAL_COL; col++) {
                     if (weeks[row].days[col] != null) {
                         dayRenderer.drawDay(canvas, weeks[row].days[col]);
                         if (weeks[row].days[col].getState() == State.SELECT){
-                            drawSelectHelper.setPoints(attr.getCellWidth(),attr.getCellHeight());
-                            drawSelectHelper.refreshPoints(col,row);
-                            drawSelectHelper.onDrawSelect(canvas);
+                            drawSelectHelper.onDrawSelect(canvas,attr.getCellWidth(),attr.getCellHeight(),col,row);
                         }
                     }
                 }
