@@ -36,7 +36,7 @@ public class Calendar extends View {
     private OnAdapterSelectListener onAdapterSelectListener;
     private float touchSlop;
     private DrawSelectHelper pointHelper;
-    private boolean canTouch = false;
+    private boolean canTouch = true;
 
     public Calendar(Context context, OnSelectDateListener onSelectDateListener,DrawSelectHelper _pointHelper) {
         super(context);

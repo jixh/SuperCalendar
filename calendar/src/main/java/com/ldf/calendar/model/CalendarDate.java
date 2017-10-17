@@ -26,6 +26,7 @@ public class CalendarDate implements Serializable {
         this.day = day;
     }
 
+
     public CalendarDate() {
         this.year = Utils.getYear();
         this.month = Utils.getMonth();

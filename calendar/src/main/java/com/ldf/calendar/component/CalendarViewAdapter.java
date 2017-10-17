@@ -5,6 +5,7 @@ import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.ldf.calendar.DateUtils;
 import com.ldf.calendar.interf.OnAdapterSelectListener;
 import com.ldf.calendar.interf.IDayRenderer;
 import com.ldf.calendar.interf.OnSelectDateListener;
@@ -277,4 +278,40 @@ public class CalendarViewAdapter extends PagerAdapter {
         Calendar c2 = calendars.get(2);
         c2.setDayRenderer(dayRenderer.copy());
     }
+
+    public static List<CalendarDate> getSelectDates() {
+        return selectDates;
+    }
+
+    public static void setSelectDates(List<String> selectDates) {
+        if (selectDates!=null && !selectDates.isEmpty()){
+            for (String d:selectDates) {
+                addSelectDate(d);
+            }
+        }
+    }
+
+    public static void addSelectDate(String d){
+        if (DateUtils.isDefaultDateFormat(d)){
+            String[] ds = d.split("-");
+            CalendarViewAdapter.selectDates.add(new CalendarDate(Integer.valueOf(ds[0]),Integer.valueOf(ds[1]),Integer.valueOf(ds[2])));
+        }
+    }
+
+    public static boolean removeDate(CalendarDate calendarDate){
+        return CalendarViewAdapter.selectDates.remove(calendarDate);
+    }
+
+
+    public static boolean isSelect(String date){
+
+        if (DateUtils.equalDate(loadDate().toString(),date))return true;
+
+        for (CalendarDate cd : selectDates
+             ) {
+            if (DateUtils.equalDate(cd.toString(),date))return true;
+        }
+        return false;
+    }
+
 }

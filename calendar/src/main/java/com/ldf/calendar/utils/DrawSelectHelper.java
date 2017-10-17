@@ -27,14 +27,15 @@ public class DrawSelectHelper {
     private static DrawBean expireDraw =new DrawBean("#22677df7","#22677df7");
 
 
-    public void onDrawSelect(Canvas canvas,int cellWidth,int cellHeight,int col,int row) {
+    public void onDrawSelect(Canvas canvas,int cellWidth,int cellHeight,int col,int row,boolean isExpire,boolean isAnim) {
 
         setPoints(cellWidth,cellHeight);
 
         refreshPoints(col,row);
 
-        draw(canvas,selectDraw,during);
+        draw(canvas,isExpire?expireDraw:selectDraw,isAnim?during:Float.valueOf(MAX).intValue());
 
+        if (isAnim)
         anim();
 
     }

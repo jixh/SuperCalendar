@@ -10,6 +10,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ldf.calendar.Utils;
 import com.ldf.calendar.component.CalendarAttr;
@@ -139,6 +140,9 @@ public class SyllabusActivity extends AppCompatActivity {
                 customDayView);
         initMarkData();
         initMonthPager();
+
+        calendarAdapter.addSelectDate("2017-10-9");
+        calendarAdapter.addSelectDate("2017-10-30");
     }
 
     /**
@@ -160,8 +164,7 @@ public class SyllabusActivity extends AppCompatActivity {
             @Override
             public void onSelectDate(CalendarDate date) {
                 refreshClickDate(date);
-
-
+                Toast.makeText(SyllabusActivity.this,"date="+date,Toast.LENGTH_SHORT).show();
             }
 
             @Override
