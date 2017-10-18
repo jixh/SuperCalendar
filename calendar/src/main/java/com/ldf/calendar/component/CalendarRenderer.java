@@ -3,6 +3,7 @@ package com.ldf.calendar.component;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.ldf.calendar.Const;
 import com.ldf.calendar.DateUtils;
@@ -76,6 +77,10 @@ public class CalendarRenderer {
 
         if (weeks[row] != null) {
             if (attr.getCalendarType() == CalendarAttr.CalendayType.MONTH) {
+                if (DateUtils.lessThanToday(weeks[row].days[col].getDate().toString())){
+                    Toast.makeText(context,"请选择大于今天的日期",Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 if (CalendarViewAdapter.isSelect(DateUtils.getWeek(weeks[row].days[col].getDate().toString()).startDay)){
                     onSelectDateListener.onSelectDate(weeks[row].days[col].getDate());

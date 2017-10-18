@@ -1,6 +1,7 @@
 package com.ldf.calendar;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.ldf.calendar.model.WeekDate;
 import com.ldf.calendar.view.Day;
@@ -8,6 +9,7 @@ import com.ldf.calendar.view.Day;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by jktaihe on 17/10/17.
@@ -24,6 +26,8 @@ public class DateUtils {
 
         return compareDate(getToday(),weekDate.endDay) < 0;
     }
+
+
 
 
     public static WeekDate getWeek(String date){
@@ -75,7 +79,6 @@ public class DateUtils {
         return w;
     }
 
-
     public static boolean isDefaultDateFormat(String date){
         try {
             SDF_DAY.parse(date);
@@ -85,7 +88,6 @@ public class DateUtils {
         }
         return true;
     }
-
 
     public static boolean equalDate(String beginDate,String endDate){
 
@@ -101,4 +103,51 @@ public class DateUtils {
 
 
     }
+
+    public static boolean lessThanToday(String date){
+        return compareDate(getToday(),date) < 0;
+    }
+
+    public static int diffMonth(String date){
+
+        Calendar c1 = Calendar.getInstance();
+        Calendar c2 = Calendar.getInstance();
+
+        try {
+            c1.setTime(SDF_DAY.parse(date));
+            c2.setTime(SDF_DAY.parse(getToday()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        int month = (c1.get(Calendar.YEAR) - c2.get(Calendar.YEAR)) * 12;
+        int month2 = c1.get(Calendar.MONTH) - c2.get(Calendar.MONTH);
+
+        return  month + month2;
+    }
+
+
+    public static boolean isNotMinMonth(String date){
+        return diffMonth(date) > -2;
+    }
+
+
+    public static boolean isNotMaxMonth(String date){
+        return diffMonth(date) < 12;
+    }
+
+    public static String getDate(String date, int duringDay){
+        String result = "";
+        try {
+            Date d = SDF_DAY.parse(date);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(d);
+            calendar.add(Calendar.DAY_OF_MONTH,duringDay);
+            result = SDF_DAY.format(calendar.getTime());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
 }

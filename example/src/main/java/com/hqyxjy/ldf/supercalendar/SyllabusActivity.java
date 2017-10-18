@@ -8,10 +8,12 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ldf.calendar.DateUtils;
 import com.ldf.calendar.Utils;
 import com.ldf.calendar.component.CalendarAttr;
 import com.ldf.calendar.view.MonthPager;
@@ -103,13 +105,21 @@ public class SyllabusActivity extends AppCompatActivity {
         nextMonthBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                if (DateUtils.isNotMaxMonth(currentDate.toString()))
                 monthPager.setCurrentItem(monthPager.getCurrentPosition() + 1);
+                Log.e("Month","nextdate="+currentDate);
             }
         });
         lastMonthBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                if (DateUtils.isNotMinMonth(currentDate.toString()))
                 monthPager.setCurrentItem(monthPager.getCurrentPosition() - 1);
+
+                Log.e("Month","lastdate="+currentDate);
+
             }
         });
     }
