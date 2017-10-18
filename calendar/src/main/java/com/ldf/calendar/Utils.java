@@ -15,17 +15,24 @@ import android.view.ViewConfiguration;
 import android.widget.Scroller;
 
 import com.ldf.calendar.model.CalendarDate;
+import com.ldf.calendar.model.WeekDate;
+import com.ldf.calendar.view.Day;
 import com.ldf.calendar.view.MonthPager;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 public final class Utils {
 
     private static HashMap<String, String> markData = new HashMap<>();
+
+    public static List<WeekDate> weekDateList = new ArrayList<>();
+
 
     private Utils() {
 
@@ -321,4 +328,11 @@ public final class Utils {
     public static int loadTop() {
         return top;
     }
+
+
+
+
+
+
+
 }

@@ -5,6 +5,7 @@ import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.ldf.calendar.DateUtils;
 import com.ldf.calendar.interf.OnAdapterSelectListener;
 import com.ldf.calendar.interf.IDayRenderer;
 import com.ldf.calendar.interf.OnSelectDateListener;
@@ -15,12 +16,14 @@ import com.ldf.calendar.model.CalendarDate;
 import com.ldf.calendar.view.Calendar;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class CalendarViewAdapter extends PagerAdapter {
     //周排列方式 1：代表周日显示为本周的第一天
     //0:代表周一显示为本周的第一天
     public static int weekArrayType = 0;
     private static CalendarDate date = new CalendarDate();
+    private static List<CalendarDate> selectDates = new ArrayList<>();
     private ArrayList<Calendar> calendars = new ArrayList<>();
     private int currentPosition;
     private CalendarAttr.CalendayType calendarType = CalendarAttr.CalendayType.MONTH;
@@ -45,6 +48,8 @@ public class CalendarViewAdapter extends PagerAdapter {
         saveDate(new CalendarDate());
         //初始化的种子日期为今天
         seedDate = new CalendarDate().modifyDay(1);
+
+
         for (int i = 0; i < 3; i++) {
             Calendar calendar = new Calendar(context, onSelectDateListener,pointHelper);
             calendar.setOnAdapterSelectListener(new OnAdapterSelectListener() {
@@ -60,6 +65,7 @@ public class CalendarViewAdapter extends PagerAdapter {
             });
             calendars.add(calendar);
         }
+
     }
 
     @Override
@@ -272,4 +278,40 @@ public class CalendarViewAdapter extends PagerAdapter {
         Calendar c2 = calendars.get(2);
         c2.setDayRenderer(dayRenderer.copy());
     }
+
+    public static List<CalendarDate> getSelectDates() {
+        return selectDates;
+    }
+
+    public static void setSelectDates(List<String> selectDates) {
+        if (selectDates!=null && !selectDates.isEmpty()){
+            for (String d:selectDates) {
+                addSelectDate(d);
+            }
+        }
+    }
+
+    public static void addSelectDate(String d){
+        if (DateUtils.isDefaultDateFormat(d)){
+            String[] ds = d.split("-");
+            CalendarViewAdapter.selectDates.add(new CalendarDate(Integer.valueOf(ds[0]),Integer.valueOf(ds[1]),Integer.valueOf(ds[2])));
+        }
+    }
+
+    public static boolean removeDate(CalendarDate calendarDate){
+        return CalendarViewAdapter.selectDates.remove(calendarDate);
+    }
+
+
+    public static boolean isSelect(String date){
+
+        if (DateUtils.equalDate(loadDate().toString(),date))return true;
+
+        for (CalendarDate cd : selectDates
+             ) {
+            if (DateUtils.equalDate(cd.toString(),date))return true;
+        }
+        return false;
+    }
+
 }

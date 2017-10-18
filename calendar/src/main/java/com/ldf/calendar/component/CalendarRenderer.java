@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.util.Log;
 
 import com.ldf.calendar.Const;
+import com.ldf.calendar.DateUtils;
 import com.ldf.calendar.Utils;
 import com.ldf.calendar.interf.IDayRenderer;
 import com.ldf.calendar.interf.OnSelectDateListener;
@@ -45,18 +46,14 @@ public class CalendarRenderer {
      * @return void
      */
     public void draw(Canvas canvas) {
-
-        Log.d(this.getClass().getSimpleName(),"draw");
-
         for (int row = 0; row < Const.TOTAL_ROW; row++) {
             if (weeks[row] != null) {
                 for (int col = 0; col < Const.TOTAL_COL; col++) {
                     if (weeks[row].days[col] != null) {
                         dayRenderer.drawDay(canvas, weeks[row].days[col]);
                         if (weeks[row].days[col].getState() == State.SELECT){
-                            drawSelectHelper.setPoints(attr.getCellWidth(),attr.getCellHeight());
-                            drawSelectHelper.refreshPoints(col,row);
-                            drawSelectHelper.onDrawSelect(canvas);
+                            drawSelectHelper.onDrawSelect(canvas,attr.getCellWidth(),attr.getCellHeight(),col,row, DateUtils.isExpire(weeks[row].days[col]),
+                                    CalendarViewAdapter.loadDate().equals(weeks[row].days[col].getDate()));
                         }
                     }
                 }
@@ -79,22 +76,28 @@ public class CalendarRenderer {
 
         if (weeks[row] != null) {
             if (attr.getCalendarType() == CalendarAttr.CalendayType.MONTH) {
+
+                if (CalendarViewAdapter.isSelect(DateUtils.getWeek(weeks[row].days[col].getDate().toString()).startDay)){
+                    onSelectDateListener.onSelectDate(weeks[row].days[col].getDate());
+                    return;
+                }
+
                 if (weeks[row].days[col].getState() == State.CURRENT_MONTH) {
                     weeks[row].days[col].setState(State.SELECT);
                     selectedDate = weeks[row].days[col].getDate();
                     CalendarViewAdapter.saveDate(selectedDate);
-                    onSelectDateListener.onSelectDate(selectedDate);
+//                    onSelectDateListener.onSelectDate(selectedDate);
                     seedDate = selectedDate;
                 } else if (weeks[row].days[col].getState() == State.PAST_MONTH) {
                     selectedDate = weeks[row].days[col].getDate();
                     CalendarViewAdapter.saveDate(selectedDate);
                     onSelectDateListener.onSelectOtherMonth(-1);
-                    onSelectDateListener.onSelectDate(selectedDate);
+//                    onSelectDateListener.onSelectDate(selectedDate);
                 } else if (weeks[row].days[col].getState() == State.NEXT_MONTH) {
                     selectedDate = weeks[row].days[col].getDate();
                     CalendarViewAdapter.saveDate(selectedDate);
                     onSelectDateListener.onSelectOtherMonth(1);
-                    onSelectDateListener.onSelectDate(selectedDate);
+//                    onSelectDateListener.onSelectDate(selectedDate);
                 }
             } else {
                 weeks[row].days[col].setState(State.SELECT);
@@ -128,7 +131,8 @@ public class CalendarRenderer {
                 weeks[rowIndex] = new Week(rowIndex);
             }
             if (weeks[rowIndex].days[i] != null) {
-                if (date.equals(CalendarViewAdapter.loadDate())) {
+//                if (date.equals(CalendarViewAdapter.loadDate())) {
+                if (CalendarViewAdapter.isSelect(date.toString())) {
                     weeks[rowIndex].days[i].setState(State.SELECT);
                     weeks[rowIndex].days[i].setDate(date);
 
@@ -137,7 +141,7 @@ public class CalendarRenderer {
                     weeks[rowIndex].days[i].setDate(date);
                 }
             } else {
-                if (date.equals(CalendarViewAdapter.loadDate())) {
+                if (CalendarViewAdapter.isSelect(date.toString())) {
                     weeks[rowIndex].days[i] = new Day(State.SELECT, date, rowIndex, i);
                 } else {
                     weeks[rowIndex].days[i] = new Day(State.CURRENT_MONTH, date, rowIndex, i);
@@ -229,7 +233,7 @@ public class CalendarRenderer {
             weeks[row] = new Week(row);
         }
         if (weeks[row].days[col] != null) {
-            if (date.equals(CalendarViewAdapter.loadDate())) {
+            if (CalendarViewAdapter.isSelect(date.toString())) {
                 weeks[row].days[col].setDate(date);
                 weeks[row].days[col].setState(State.SELECT);
             } else {
@@ -237,7 +241,7 @@ public class CalendarRenderer {
                 weeks[row].days[col].setState(State.CURRENT_MONTH);
             }
         } else {
-            if (date.equals(CalendarViewAdapter.loadDate())) {
+            if (CalendarViewAdapter.isSelect(date.toString())) {
                 weeks[row].days[col] = new Day(State.SELECT, date, row, col);
             } else {
                 weeks[row].days[col] = new Day(State.CURRENT_MONTH, date, row, col);

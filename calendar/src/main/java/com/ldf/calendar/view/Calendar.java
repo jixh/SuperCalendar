@@ -2,11 +2,13 @@ package com.ldf.calendar.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.ldf.calendar.Const;
 import com.ldf.calendar.interf.IDayRenderer;
@@ -33,9 +35,8 @@ public class Calendar extends View {
 
     private OnAdapterSelectListener onAdapterSelectListener;
     private float touchSlop;
-    private int radius = 20;
-    private int margin = 10;
     private DrawSelectHelper pointHelper;
+    private boolean canTouch = true;
 
     public Calendar(Context context, OnSelectDateListener onSelectDateListener,DrawSelectHelper _pointHelper) {
         super(context);
@@ -82,6 +83,9 @@ public class Calendar extends View {
      */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+
+        if (!canTouch)return true;
+
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 posX = event.getX();
@@ -90,6 +94,7 @@ public class Calendar extends View {
             case MotionEvent.ACTION_UP:
                 float disX = event.getX() - posX;
                 float disY = event.getY() - posY;
+
                 if (Math.abs(disX) < touchSlop && Math.abs(disY) < touchSlop) {
                     int col = (int) (posX / cellWidth);
                     int row = (int) (posY / cellHeight);
@@ -102,10 +107,12 @@ public class Calendar extends View {
 
                     invalidate();
                 }
+
                 break;
         }
         return true;
     }
+
 
     public CalendarAttr.CalendayType getCalendarType() {
         return calendarAttr.getCalendarType();
@@ -166,4 +173,8 @@ public class Calendar extends View {
         renderer.setDayRenderer(dayRenderer);
     }
 
+    @Override
+    public void setOnLongClickListener(@Nullable OnLongClickListener l) {
+        super.setOnLongClickListener(l);
+    }
 }
