@@ -22,6 +22,7 @@ public class CustomDayView extends DayView {
     private ImageView marker;
     private View selectedBackground;
     private View todayBackground;
+    public static final int selectColor = Color.parseColor("#FFFFFF");
     private final CalendarDate today = new CalendarDate();
 
     /**
@@ -40,8 +41,8 @@ public class CustomDayView extends DayView {
 
     @Override
     public void refreshContent() {
-        renderToday(day.getDate());
         renderSelect(day.getState());
+        renderToday(day.getDate());
         renderMarker(day.getDate(), day.getState());
         super.refreshContent();
     }
@@ -65,19 +66,25 @@ public class CustomDayView extends DayView {
 
     private void renderSelect(State state) {
         if (state == State.SELECT) {
-            selectedBackground.setVisibility(VISIBLE);
-            dateTv.setTextColor(Color.WHITE);
+            selectedBackground.setVisibility(GONE);
+            dateTv.setTextColor(Color.parseColor("#3c4350"));
         } else if (state == State.NEXT_MONTH || state == State.PAST_MONTH) {
             selectedBackground.setVisibility(GONE);
-            dateTv.setTextColor(Color.parseColor("#d5d5d5"));
+            dateTv.setTextColor(Color.parseColor("#bcc0c8"));
         } else {
             selectedBackground.setVisibility(GONE);
-            dateTv.setTextColor(Color.parseColor("#111111"));
+            dateTv.setTextColor(Color.parseColor("#3c4350"));
         }
     }
 
     private void renderToday(CalendarDate date) {
+
         if (date != null) {
+
+            if (Utils.isSelectDay(date.toString())){
+                dateTv.setTextColor(selectColor);
+            }
+
             if (date.equals(today)) {
                 dateTv.setText("今");
                 todayBackground.setVisibility(VISIBLE);

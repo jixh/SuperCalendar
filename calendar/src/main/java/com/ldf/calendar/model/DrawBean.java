@@ -14,6 +14,7 @@ public class DrawBean {
 
     public DrawBean(String circleColor,String rectColor){
         circlePaint = new Paint();
+        circlePaint.setAntiAlias(true);
         circlePaint.setColor(Color.parseColor(circleColor));
         rectPaint = new Paint();
         rectPaint.setColor(Color.parseColor(rectColor));

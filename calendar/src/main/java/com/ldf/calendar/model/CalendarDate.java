@@ -2,6 +2,7 @@ package com.ldf.calendar.model;
 
 import android.util.Log;
 
+import com.ldf.calendar.DateUtils;
 import com.ldf.calendar.Utils;
 
 import java.io.Serializable;
@@ -31,6 +32,19 @@ public class CalendarDate implements Serializable {
         this.year = Utils.getYear();
         this.month = Utils.getMonth();
         this.day = Utils.getDay();
+    }
+
+    public CalendarDate(String date){
+        if (DateUtils.isDefaultDateFormat(date)){
+            String[] ds = date.split("-");
+            this.year = Integer.valueOf(ds[0]);
+            this.month = Integer.valueOf(ds[1]);
+            this.day = Integer.valueOf(ds[2]);
+        }else {
+            this.year = Utils.getYear();
+            this.month = Utils.getMonth();
+            this.day = Utils.getDay();
+        }
     }
 
     /**

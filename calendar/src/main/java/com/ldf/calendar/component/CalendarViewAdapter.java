@@ -253,6 +253,7 @@ public class CalendarViewAdapter extends PagerAdapter {
 
     public static void saveDate(CalendarDate calendarDate) {
         date = calendarDate;
+        Utils.weekDate = DateUtils.getWeek(calendarDate.toString());
     }
 
     public static CalendarDate loadDate() {
@@ -292,10 +293,7 @@ public class CalendarViewAdapter extends PagerAdapter {
     }
 
     public static void addSelectDate(String d){
-        if (DateUtils.isDefaultDateFormat(d)){
-            String[] ds = d.split("-");
-            CalendarViewAdapter.selectDates.add(new CalendarDate(Integer.valueOf(ds[0]),Integer.valueOf(ds[1]),Integer.valueOf(ds[2])));
-        }
+         CalendarViewAdapter.selectDates.add(new CalendarDate(d));
     }
 
     public static boolean removeDate(CalendarDate calendarDate){
@@ -307,10 +305,9 @@ public class CalendarViewAdapter extends PagerAdapter {
 
         if (DateUtils.equalDate(loadDate().toString(),date))return true;
 
-        for (CalendarDate cd : selectDates
-             ) {
+        for (CalendarDate cd : selectDates)
             if (DateUtils.equalDate(cd.toString(),date))return true;
-        }
+
         return false;
     }
 

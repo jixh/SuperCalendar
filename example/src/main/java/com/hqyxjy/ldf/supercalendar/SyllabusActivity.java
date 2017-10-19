@@ -8,12 +8,15 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ldf.calendar.DateUtils;
 import com.ldf.calendar.Utils;
 import com.ldf.calendar.component.CalendarAttr;
+import com.ldf.calendar.model.WeekDate;
 import com.ldf.calendar.view.MonthPager;
 import com.ldf.calendar.interf.OnSelectDateListener;
 import com.ldf.calendar.component.CalendarViewAdapter;
@@ -103,13 +106,21 @@ public class SyllabusActivity extends AppCompatActivity {
         nextMonthBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                if (DateUtils.isNotMaxMonth(currentDate.toString()))
                 monthPager.setCurrentItem(monthPager.getCurrentPosition() + 1);
+                Log.e("Month","nextdate="+currentDate);
             }
         });
         lastMonthBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                if (DateUtils.isNotMinMonth(currentDate.toString()))
                 monthPager.setCurrentItem(monthPager.getCurrentPosition() - 1);
+
+                Log.e("Month","lastdate="+currentDate);
+
             }
         });
     }
@@ -132,17 +143,23 @@ public class SyllabusActivity extends AppCompatActivity {
      */
     private void initCalendarView() {
         initListener();
+
         CustomDayView customDayView = new CustomDayView(context, R.layout.custom_day);
+
         calendarAdapter = new CalendarViewAdapter(
                 context,
                 onSelectDateListener,
                 CalendarAttr.CalendayType.MONTH,
                 customDayView);
-        initMarkData();
+
         initMonthPager();
 
-        calendarAdapter.addSelectDate("2017-10-9");
-        calendarAdapter.addSelectDate("2017-10-30");
+
+        Utils.weekDateList.add(new WeekDate("2017-10-9","2017-10-15"));
+        Utils.weekDateList.add(new WeekDate("2017-10-23","2017-10-29"));
+        Utils.weekDateList.add(new WeekDate("2017-10-30","2017-11-5"));
+        Utils.weekDateList.add(new WeekDate("2017-11-6","2017-11-12"));
+        Utils.setSelectDates();
     }
 
     /**
@@ -164,6 +181,9 @@ public class SyllabusActivity extends AppCompatActivity {
             @Override
             public void onSelectDate(CalendarDate date) {
                 refreshClickDate(date);
+
+                Utils.pressWeekDate = DateUtils.getWeek(date.toString()).startDay;
+
                 Toast.makeText(SyllabusActivity.this,"date="+date,Toast.LENGTH_SHORT).show();
             }
 
@@ -224,7 +244,7 @@ public class SyllabusActivity extends AppCompatActivity {
     }
 
     private void refreshMonthPager() {
-        CalendarDate today = new CalendarDate();
+        CalendarDate today = new CalendarDate("2017-12-02");
         calendarAdapter.notifyDataChanged(today);
         textViewYearDisplay.setText(today.getYear() + "年");
         textViewMonthDisplay.setText(today.getMonth() + "");

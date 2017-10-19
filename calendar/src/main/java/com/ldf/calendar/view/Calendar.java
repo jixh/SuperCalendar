@@ -36,7 +36,6 @@ public class Calendar extends View {
     private OnAdapterSelectListener onAdapterSelectListener;
     private float touchSlop;
     private DrawSelectHelper pointHelper;
-    private boolean canTouch = true;
 
     public Calendar(Context context, OnSelectDateListener onSelectDateListener,DrawSelectHelper _pointHelper) {
         super(context);
@@ -83,9 +82,6 @@ public class Calendar extends View {
      */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-
-        if (!canTouch)return true;
-
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 posX = event.getX();

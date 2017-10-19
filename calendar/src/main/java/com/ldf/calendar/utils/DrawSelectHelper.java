@@ -22,9 +22,9 @@ public class DrawSelectHelper {
 
     private int w, h,margin = 10, radius;
 
-    private static DrawBean selectDraw = new DrawBean("#27221122","#27221122");
+    private static DrawBean selectDraw = new DrawBean("#2eb872","#332eb872");
 
-    private static DrawBean expireDraw =new DrawBean("#22677df7","#22677df7");
+    private static DrawBean expireDraw =new DrawBean("#cbd2db","#33cbd2db");
 
 
     public void onDrawSelect(Canvas canvas,int cellWidth,int cellHeight,int col,int row,boolean isExpire,boolean isAnim) {
@@ -56,9 +56,9 @@ public class DrawSelectHelper {
                 points[3].y+h/2-margin,
                 drawBean.rectPaint);
 
-        canvas.drawCircle(points[0].x+((points[2].x - points[0].x)/MAX * (MAX -during)),points[0].y,radius,drawBean.circlePaint);
+        canvas.drawCircle(points[0].x+((points[2].x - points[0].x)/MAX * (MAX -during)),points[0].y,radius-margin,drawBean.circlePaint);
 
-        canvas.drawCircle(points[3].x+((points[2].x - points[3].x)/MAX * (MAX -during)),points[3].y,radius,drawBean.circlePaint);
+        canvas.drawCircle(points[3].x+((points[2].x - points[3].x)/MAX * (MAX -during)),points[3].y,radius-margin,drawBean.circlePaint);
     }
 
     private void setPoints(int cellWidth, int cellHeight) {
