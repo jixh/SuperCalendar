@@ -17,12 +17,15 @@
         android:background="@drawable/selected_background"
         android:layout_centerInParent="true"
         android:visibility="gone"/>
+
     <TextView
         android:id="@+id/date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="19"/>
+        android:textSize="12sp"
+        android:text="15"/>
+
     <ImageView
         android:id="@+id/maker"
         android:layout_alignParentBottom="true"
@@ -31,5 +34,5 @@
         android:background="@drawable/view_syllabus_mark_background"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="visible"/>
+        android:visibility="gone"/>
 </RelativeLayout>

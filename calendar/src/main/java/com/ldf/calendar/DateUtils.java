@@ -20,9 +20,14 @@ public class DateUtils {
 
     private static SimpleDateFormat SDF_DAY = new SimpleDateFormat("yyyy-MM-dd");
 
-    public static boolean isExpire(Day day){
+    public static boolean isExpire(String day){
 
-        WeekDate weekDate = getWeek(day.getDate().toString());
+
+        if (DateUtils.equalDate(day,Utils.pressWeekDate))
+            return true;
+
+
+        WeekDate weekDate = getWeek(day);
 
         return compareDate(getToday(),weekDate.endDay) < 0;
     }
@@ -90,6 +95,8 @@ public class DateUtils {
     }
 
     public static boolean equalDate(String beginDate,String endDate){
+
+        if (TextUtils.isEmpty(beginDate)|| TextUtils.isEmpty(endDate))return false;
 
         if (TextUtils.equals(beginDate,endDate))return true;
 

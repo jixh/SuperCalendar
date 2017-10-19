@@ -10,10 +10,12 @@ import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.widget.Scroller;
 
+import com.ldf.calendar.component.CalendarViewAdapter;
 import com.ldf.calendar.model.CalendarDate;
 import com.ldf.calendar.model.WeekDate;
 import com.ldf.calendar.view.Day;
@@ -32,6 +34,29 @@ public final class Utils {
     private static HashMap<String, String> markData = new HashMap<>();
 
     public static List<WeekDate> weekDateList = new ArrayList<>();
+    public static WeekDate weekDate;
+    public static String pressWeekDate;
+
+    public static void setSelectDates() {
+        CalendarViewAdapter.getSelectDates().clear();
+        for (WeekDate wd : weekDateList) {
+            CalendarViewAdapter.addSelectDate(wd.startDay);
+        }
+    }
+
+    public static boolean isSelectDay(String date) {
+
+        WeekDate weekDate = Utils.weekDate;
+        if (weekDate!=null && (DateUtils.equalDate(weekDate.startDay, date) || DateUtils.equalDate(weekDate.endDay, date)))return true;
+
+
+        for (WeekDate wd : weekDateList) {
+            if (DateUtils.equalDate(wd.startDay, date) || DateUtils.equalDate(wd.endDay, date))
+                return true;
+        }
+
+        return false;
+    }
 
 
     private Utils() {
@@ -328,11 +353,6 @@ public final class Utils {
     public static int loadTop() {
         return top;
     }
-
-
-
-
-
 
 
 }

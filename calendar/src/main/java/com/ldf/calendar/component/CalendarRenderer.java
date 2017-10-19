@@ -51,11 +51,14 @@ public class CalendarRenderer {
             if (weeks[row] != null) {
                 for (int col = 0; col < Const.TOTAL_COL; col++) {
                     if (weeks[row].days[col] != null) {
-                        dayRenderer.drawDay(canvas, weeks[row].days[col]);
+
                         if (weeks[row].days[col].getState() == State.SELECT){
-                            drawSelectHelper.onDrawSelect(canvas,attr.getCellWidth(),attr.getCellHeight(),col,row, DateUtils.isExpire(weeks[row].days[col]),
+                            drawSelectHelper.onDrawSelect(canvas,attr.getCellWidth(),attr.getCellHeight(),col,row,
+                                    DateUtils.isExpire(weeks[row].days[col].getDate().toString()),
                                     CalendarViewAdapter.loadDate().equals(weeks[row].days[col].getDate()));
                         }
+
+                        dayRenderer.drawDay(canvas, weeks[row].days[col]);
                     }
                 }
             }
@@ -77,6 +80,7 @@ public class CalendarRenderer {
 
         if (weeks[row] != null) {
             if (attr.getCalendarType() == CalendarAttr.CalendayType.MONTH) {
+
                 if (DateUtils.lessThanToday(weeks[row].days[col].getDate().toString())){
                     Toast.makeText(context,"请选择大于今天的日期",Toast.LENGTH_SHORT).show();
                     return;
@@ -104,6 +108,9 @@ public class CalendarRenderer {
                     onSelectDateListener.onSelectOtherMonth(1);
 //                    onSelectDateListener.onSelectDate(selectedDate);
                 }
+
+                drawSelectHelper.setAnim(true);
+
             } else {
                 weeks[row].days[col].setState(State.SELECT);
                 selectedDate = weeks[row].days[col].getDate();
@@ -113,7 +120,6 @@ public class CalendarRenderer {
             }
         }
 
-        drawSelectHelper.setAnim(true);
     }
 
     /**
