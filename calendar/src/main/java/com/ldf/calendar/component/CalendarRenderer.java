@@ -46,16 +46,23 @@ public class CalendarRenderer {
      *
      * @return void
      */
+    public Day selectAnim = null;
+
     public void draw(Canvas canvas) {
         for (int row = 0; row < Const.TOTAL_ROW; row++) {
+
             if (weeks[row] != null) {
                 for (int col = 0; col < Const.TOTAL_COL; col++) {
                     if (weeks[row].days[col] != null) {
 
+                        if (CalendarViewAdapter.loadDate().equals(weeks[row].days[col].getDate())){
+                            selectAnim = weeks[row].days[col];
+                        }
+
                         if (weeks[row].days[col].getState() == State.SELECT){
                             drawSelectHelper.onDrawSelect(canvas,attr.getCellWidth(),attr.getCellHeight(),col,row,
                                     DateUtils.isExpire(weeks[row].days[col].getDate().toString()),
-                                    CalendarViewAdapter.loadDate().equals(weeks[row].days[col].getDate()));
+                                    false);
                         }
 
                         dayRenderer.drawDay(canvas, weeks[row].days[col]);
