@@ -51,10 +51,10 @@ public class CalendarRenderer {
      * @return void
      */
 
-
     public void draw(Canvas canvas) {
 
         for (int row = 0; row < Const.TOTAL_ROW; row++) {
+
             if (weeks[row] != null) {
 
                 for (int col = 0; col < Const.TOTAL_COL; col++) {
@@ -62,8 +62,7 @@ public class CalendarRenderer {
                         if (weeks[row].days[col].getState() == State.SELECT){
                             drawSelectHelper.onDrawSelect(canvas,attr.getCellWidth(),attr.getCellHeight(),col,row,
                                     DateUtils.isExpire(weeks[row].days[col].getDate().toString()),
-                                    weeks[row].days[col].getDate().equals(CalendarViewAdapter.loadDate()));
-                        }
+                                    weeks[row].days[col].getDate().equals(CalendarViewAdapter.loadDate()));}
                     }
                 }
 
