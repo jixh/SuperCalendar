@@ -33,10 +33,13 @@ public final class Utils {
 
     private static HashMap<String, String> markData = new HashMap<>();
 
+    //保存转化的数据
     public static List<WeekDate> weekDateList = new ArrayList<>();
-    public static WeekDate weekDate;
-    public static String pressWeekDate;
+    public static String pressedStateStartDate;
 
+    /**
+     * 同步选择的数据
+     */
     public static void setSelectDates() {
         CalendarViewAdapter.getSelectDates().clear();
         for (WeekDate wd : weekDateList) {
@@ -44,11 +47,18 @@ public final class Utils {
         }
     }
 
+
+    /**
+     * 判断是否显示白色数值
+     * @param date
+     * @return
+     */
     public static boolean isSelectDay(String date) {
 
-        WeekDate weekDate = Utils.weekDate;
-        if (weekDate!=null && (DateUtils.equalDate(weekDate.startDay, date) || DateUtils.equalDate(weekDate.endDay, date)))return true;
-
+        if (CalendarViewAdapter.loadDate() != null){
+            WeekDate weekDate = DateUtils.getWeek(CalendarViewAdapter.loadDate().toString());
+            if (DateUtils.equalDate(weekDate.startDay, date) || DateUtils.equalDate(weekDate.endDay, date))return true;
+        }
 
         for (WeekDate wd : weekDateList) {
             if (DateUtils.equalDate(wd.startDay, date) || DateUtils.equalDate(wd.endDay, date))

@@ -40,11 +40,11 @@ public class CustomDayView extends DayView {
     }
 
     @Override
-    public void refreshContent() {
+    public void refreshContent(boolean isAnim) {
         renderSelect(day.getState());
         renderToday(day.getDate());
-        renderMarker(day.getDate(), day.getState());
-        super.refreshContent();
+//        renderMarker(day.getDate(), day.getState());
+        super.refreshContent(isAnim);
     }
 
     private void renderMarker(CalendarDate date, State state) {

@@ -13,9 +13,9 @@ import com.ldf.calendar.view.DayView;
 
 public interface IDayRenderer {
 
-    void refreshContent();
+    void refreshContent(boolean isAnim);
 
-    void drawDay(Canvas canvas, Day day);
+    void drawDay(Canvas canvas, Day day,boolean isAnim);
 
     IDayRenderer copy();
 

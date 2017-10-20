@@ -11,10 +11,14 @@ import com.ldf.calendar.Utils;
 import com.ldf.calendar.interf.IDayRenderer;
 import com.ldf.calendar.interf.OnSelectDateListener;
 import com.ldf.calendar.model.CalendarDate;
+import com.ldf.calendar.model.Point;
 import com.ldf.calendar.utils.DrawSelectHelper;
 import com.ldf.calendar.view.Calendar;
 import com.ldf.calendar.view.Day;
 import com.ldf.calendar.view.Week;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.ldf.calendar.component.CalendarViewAdapter.pointHelper;
 
@@ -46,22 +50,30 @@ public class CalendarRenderer {
      *
      * @return void
      */
+
+
     public void draw(Canvas canvas) {
+
         for (int row = 0; row < Const.TOTAL_ROW; row++) {
             if (weeks[row] != null) {
+
                 for (int col = 0; col < Const.TOTAL_COL; col++) {
                     if (weeks[row].days[col] != null) {
-
                         if (weeks[row].days[col].getState() == State.SELECT){
                             drawSelectHelper.onDrawSelect(canvas,attr.getCellWidth(),attr.getCellHeight(),col,row,
                                     DateUtils.isExpire(weeks[row].days[col].getDate().toString()),
-                                    CalendarViewAdapter.loadDate().equals(weeks[row].days[col].getDate()));
+                                    weeks[row].days[col].getDate().equals(CalendarViewAdapter.loadDate()));
                         }
+                    }
+                }
 
-                        dayRenderer.drawDay(canvas, weeks[row].days[col]);
+                for (int col = 0; col < Const.TOTAL_COL; col++) {
+                    if (weeks[row].days[col] != null) {
+                        dayRenderer.drawDay(canvas, weeks[row].days[col],drawSelectHelper.isAnim());
                     }
                 }
             }
+
         }
 
         if (drawSelectHelper.isAnim())
@@ -81,41 +93,42 @@ public class CalendarRenderer {
         if (weeks[row] != null) {
             if (attr.getCalendarType() == CalendarAttr.CalendayType.MONTH) {
 
+
                 if (DateUtils.lessThanToday(weeks[row].days[col].getDate().toString())){
-                    Toast.makeText(context,"请选择大于今天的日期",Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 if (CalendarViewAdapter.isSelect(DateUtils.getWeek(weeks[row].days[col].getDate().toString()).startDay)){
-                    onSelectDateListener.onSelectDate(weeks[row].days[col].getDate());
-                    return;
+                    onSelectDateListener.onSelectDate(weeks[row].days[col].getDate(),true);
+                }else {
+
+                    if (weeks[row].days[col].getState() == State.CURRENT_MONTH) {
+                        weeks[row].days[col].setState(State.SELECT);
+                        selectedDate = weeks[row].days[col].getDate();
+                        CalendarViewAdapter.saveDate(selectedDate);
+                    onSelectDateListener.onSelectDate(selectedDate,false);
+                        seedDate = selectedDate;
+                    } else if (weeks[row].days[col].getState() == State.PAST_MONTH) {
+                        selectedDate = weeks[row].days[col].getDate();
+                        CalendarViewAdapter.saveDate(selectedDate);
+                        onSelectDateListener.onSelectOtherMonth(-1);
+                    onSelectDateListener.onSelectDate(selectedDate,false);
+                    } else if (weeks[row].days[col].getState() == State.NEXT_MONTH) {
+                        selectedDate = weeks[row].days[col].getDate();
+                        CalendarViewAdapter.saveDate(selectedDate);
+                        onSelectDateListener.onSelectOtherMonth(1);
+                    onSelectDateListener.onSelectDate(selectedDate,false);
+                    }
+
+                    drawSelectHelper.setAnim(true);
                 }
 
-                if (weeks[row].days[col].getState() == State.CURRENT_MONTH) {
-                    weeks[row].days[col].setState(State.SELECT);
-                    selectedDate = weeks[row].days[col].getDate();
-                    CalendarViewAdapter.saveDate(selectedDate);
-//                    onSelectDateListener.onSelectDate(selectedDate);
-                    seedDate = selectedDate;
-                } else if (weeks[row].days[col].getState() == State.PAST_MONTH) {
-                    selectedDate = weeks[row].days[col].getDate();
-                    CalendarViewAdapter.saveDate(selectedDate);
-                    onSelectDateListener.onSelectOtherMonth(-1);
-//                    onSelectDateListener.onSelectDate(selectedDate);
-                } else if (weeks[row].days[col].getState() == State.NEXT_MONTH) {
-                    selectedDate = weeks[row].days[col].getDate();
-                    CalendarViewAdapter.saveDate(selectedDate);
-                    onSelectDateListener.onSelectOtherMonth(1);
-//                    onSelectDateListener.onSelectDate(selectedDate);
-                }
-
-                drawSelectHelper.setAnim(true);
 
             } else {
                 weeks[row].days[col].setState(State.SELECT);
                 selectedDate = weeks[row].days[col].getDate();
                 CalendarViewAdapter.saveDate(selectedDate);
-                onSelectDateListener.onSelectDate(selectedDate);
+                onSelectDateListener.onSelectDate(selectedDate,false);
                 seedDate = selectedDate;
             }
         }

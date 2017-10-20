@@ -8,6 +8,6 @@ import com.ldf.calendar.view.Week;
  */
 
 public interface OnSelectDateListener {
-    void onSelectDate(CalendarDate date);
+    void onSelectDate(CalendarDate date,boolean isExist);
     void onSelectOtherMonth(int offset);//点击其它月份日期
 }

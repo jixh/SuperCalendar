@@ -22,7 +22,7 @@ public class CalendarViewAdapter extends PagerAdapter {
     //周排列方式 1：代表周日显示为本周的第一天
     //0:代表周一显示为本周的第一天
     public static int weekArrayType = 0;
-    private static CalendarDate date = new CalendarDate();
+    private static CalendarDate date;
     private static List<CalendarDate> selectDates = new ArrayList<>();
     private ArrayList<Calendar> calendars = new ArrayList<>();
     private int currentPosition;
@@ -45,7 +45,7 @@ public class CalendarViewAdapter extends PagerAdapter {
 
         pointHelper = new DrawSelectHelper();
 
-        saveDate(new CalendarDate());
+//        saveDate(new CalendarDate());
         //初始化的种子日期为今天
         seedDate = new CalendarDate().modifyDay(1);
 
@@ -209,7 +209,7 @@ public class CalendarViewAdapter extends PagerAdapter {
 
     public void notifyDataChanged(CalendarDate date) {
         seedDate = date;
-        saveDate(date);
+//        saveDate(date);
         if (calendarType == CalendarAttr.CalendayType.WEEK) {
             MonthPager.CURRENT_DAY_INDEX = currentPosition;
             Calendar v1 = calendars.get(currentPosition % 3);
@@ -253,7 +253,6 @@ public class CalendarViewAdapter extends PagerAdapter {
 
     public static void saveDate(CalendarDate calendarDate) {
         date = calendarDate;
-        Utils.weekDate = DateUtils.getWeek(calendarDate.toString());
     }
 
     public static CalendarDate loadDate() {
@@ -284,13 +283,6 @@ public class CalendarViewAdapter extends PagerAdapter {
         return selectDates;
     }
 
-    public static void setSelectDates(List<String> selectDates) {
-        if (selectDates!=null && !selectDates.isEmpty()){
-            for (String d:selectDates) {
-                addSelectDate(d);
-            }
-        }
-    }
 
     public static void addSelectDate(String d){
          CalendarViewAdapter.selectDates.add(new CalendarDate(d));
@@ -303,7 +295,7 @@ public class CalendarViewAdapter extends PagerAdapter {
 
     public static boolean isSelect(String date){
 
-        if (DateUtils.equalDate(loadDate().toString(),date))return true;
+        if (loadDate()!=null && DateUtils.equalDate(loadDate().toString(),date))return true;
 
         for (CalendarDate cd : selectDates)
             if (DateUtils.equalDate(cd.toString(),date))return true;

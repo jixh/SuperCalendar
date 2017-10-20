@@ -12,7 +12,7 @@ import com.ldf.calendar.model.Point;
 
 public class DrawSelectHelper {
 
-    public static final float MAX = 10;
+    public static final float MAX = 5;
 
     private boolean isAnim = false;
 
@@ -41,13 +41,12 @@ public class DrawSelectHelper {
     }
 
     private void anim() {
-        if (during >= MAX){
+        if (during == MAX){
             setAnim(false);
         }else {
             during++;
         }
     }
-
 
     private void draw(Canvas canvas,DrawBean drawBean,int during){
         canvas.drawRect(points[0].x + ((points[2].x - points[0].x)/MAX * (MAX -during)),
@@ -98,12 +97,6 @@ public class DrawSelectHelper {
         }else{
             during = Float.valueOf(MAX).intValue();
         }
-
-    }
-
-
-    public void drawExpireDate(Canvas canvas,int cellWidth,int cellHeight,int col,int row){
-
 
     }
 }

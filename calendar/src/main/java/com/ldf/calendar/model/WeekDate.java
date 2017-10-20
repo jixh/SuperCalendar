@@ -1,11 +1,13 @@
 package com.ldf.calendar.model;
 
+import java.io.Serializable;
+
 /**
  * Created by jktaihe on 17/10/17.
  * blog: blog.jktaihe.com
  */
 
-public class WeekDate {
+public class WeekDate implements Serializable {
 
     public String startDay;
     public String endDay;
@@ -13,5 +15,23 @@ public class WeekDate {
     public WeekDate(String startDay, String endDay) {
         this.startDay = startDay;
         this.endDay = endDay;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        WeekDate weekDate = (WeekDate) o;
+
+        if (!startDay.equals(weekDate.startDay)) return false;
+        return endDay.equals(weekDate.endDay);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = startDay.hashCode();
+        result = 31 * result + endDay.hashCode();
+        return result;
     }
 }

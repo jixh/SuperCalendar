@@ -9,6 +9,7 @@ import android.view.MotionEvent;
 
 import com.ldf.calendar.behavior.MonthPagerBehavior;
 import com.ldf.calendar.component.CalendarViewAdapter;
+import com.ldf.calendar.model.CalendarDate;
 
 @CoordinatorLayout.DefaultBehavior(MonthPagerBehavior.class)
 public class MonthPager extends ViewPager {
@@ -106,7 +107,7 @@ public class MonthPager extends ViewPager {
     public void selectOtherMonth(int offset) {
         setCurrentItem(currentPosition + offset);
         CalendarViewAdapter calendarViewAdapter = (CalendarViewAdapter) getAdapter();
-        calendarViewAdapter.notifyDataChanged(CalendarViewAdapter.loadDate());
+        calendarViewAdapter.notifyDataChanged(new CalendarDate());
     }
 
     public int getPageScrollState() {

@@ -1,10 +1,8 @@
 package com.ldf.calendar;
 
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.ldf.calendar.model.WeekDate;
-import com.ldf.calendar.view.Day;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -22,13 +20,10 @@ public class DateUtils {
 
     public static boolean isExpire(String day){
 
-
-        if (DateUtils.equalDate(day,Utils.pressWeekDate))
+        if (DateUtils.equalDate(day,Utils.pressedStateStartDate))
             return true;
 
-
         WeekDate weekDate = getWeek(day);
-
         return compareDate(getToday(),weekDate.endDay) < 0;
     }
 

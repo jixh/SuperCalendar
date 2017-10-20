@@ -48,16 +48,16 @@ public abstract class DayView extends RelativeLayout implements IDayRenderer {
     }
 
     @Override
-    public void refreshContent() {
+    public void refreshContent(boolean isAnim) {
         measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
                 MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
         layout(0, 0, getMeasuredWidth(), getMeasuredHeight());
     }
 
     @Override
-    public void drawDay(Canvas canvas, Day day) {
+    public void drawDay(Canvas canvas, Day day,boolean isAnim) {
         this.day = day;
-        refreshContent();
+        refreshContent(isAnim);
         int saveId = canvas.save();
         canvas.translate(getTranslateX(canvas, day),
                 day.getPosRow() * getMeasuredHeight());

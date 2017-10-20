@@ -37,7 +37,7 @@ public class ThemeDayView extends DayView {
     }
 
     @Override
-    public void refreshContent() {
+    public void refreshContent(boolean isAnim) {
         CalendarDate date = day.getDate();
         State state = day.getState();
         if (date != null) {
@@ -54,7 +54,7 @@ public class ThemeDayView extends DayView {
         } else {
             selectedBackground.setVisibility(GONE);
         }
-        super.refreshContent();
+        super.refreshContent(isAnim);
     }
 
     @Override

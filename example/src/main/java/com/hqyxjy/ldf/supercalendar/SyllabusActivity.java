@@ -1,13 +1,13 @@
 package com.hqyxjy.ldf.supercalendar;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -22,7 +22,6 @@ import com.ldf.calendar.interf.OnSelectDateListener;
 import com.ldf.calendar.component.CalendarViewAdapter;
 import com.ldf.calendar.model.CalendarDate;
 import com.ldf.calendar.view.Calendar;
-import com.ldf.calendar.view.Week;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -179,12 +178,9 @@ public class SyllabusActivity extends AppCompatActivity {
     private void initListener() {
         onSelectDateListener = new OnSelectDateListener() {
             @Override
-            public void onSelectDate(CalendarDate date) {
-                refreshClickDate(date);
-
-                Utils.pressWeekDate = DateUtils.getWeek(date.toString()).startDay;
-
-                Toast.makeText(SyllabusActivity.this,"date="+date,Toast.LENGTH_SHORT).show();
+            public void onSelectDate(CalendarDate date,boolean isExist) {
+                if (isExist)
+                showDialog(date);
             }
 
             @Override
@@ -256,5 +252,40 @@ public class SyllabusActivity extends AppCompatActivity {
         calendarAdapter.notifyDataSetChanged();
         calendarAdapter.notifyDataChanged(new CalendarDate());
     }
+    private static final String[] items = {"删除","修改"};
+
+    public void showDialog(final CalendarDate date){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which == 0){
+                    delete(date);
+                }else {
+                    update(date);
+                }
+            }
+        });
+        builder.show();
+    }
+
+    public void delete(CalendarDate date){
+        WeekDate weekDate = DateUtils.getWeek(date.toString());
+        Utils.weekDateList.remove(weekDate);
+        Utils.setSelectDates();
+        calendarAdapter.notifyDataSetChanged();
+        calendarAdapter.notifyDataChanged(date);
+    }
+
+    public void update(CalendarDate date){
+        WeekDate weekDate = DateUtils.getWeek(date.toString());
+        Utils.pressedStateStartDate = weekDate.startDay;
+        calendarAdapter.notifyDataSetChanged();
+        calendarAdapter.notifyDataChanged(date);
+
+    }
+
+
+
 }
 
