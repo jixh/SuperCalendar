@@ -1,5 +1,7 @@
 package com.ldf.calendar.model;
 
+import com.ldf.calendar.DateUtils;
+
 import java.io.Serializable;
 
 /**
@@ -13,8 +15,8 @@ public class WeekDate implements Serializable {
     public String endDay;
 
     public WeekDate(String startDay, String endDay) {
-        this.startDay = startDay;
-        this.endDay = endDay;
+        this.startDay = DateUtils.getFormatDate(startDay);
+        this.endDay =  DateUtils.getFormatDate(endDay);
     }
 
     @Override

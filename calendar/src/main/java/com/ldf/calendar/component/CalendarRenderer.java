@@ -2,6 +2,7 @@ package com.ldf.calendar.component;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -97,9 +98,14 @@ public class CalendarRenderer {
                     return;
                 }
 
+
                 if (CalendarViewAdapter.isSelect(DateUtils.getWeek(weeks[row].days[col].getDate().toString()).startDay)){
+
+                    if (!TextUtils.isEmpty(Utils.pressedStateStartDate))return;
+
                     onSelectDateListener.onSelectDate(weeks[row].days[col].getDate(),true);
-                }else {
+
+                }else if (CalendarViewAdapter.canSelect){
 
                     if (weeks[row].days[col].getState() == State.CURRENT_MONTH) {
                         weeks[row].days[col].setState(State.SELECT);

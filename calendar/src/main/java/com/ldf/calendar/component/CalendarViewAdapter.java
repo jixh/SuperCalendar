@@ -30,6 +30,7 @@ public class CalendarViewAdapter extends PagerAdapter {
     private int rowCount = 0;
     private CalendarDate seedDate;
     public static DrawSelectHelper pointHelper;
+    public static boolean canSelect = false;
 
     public CalendarViewAdapter(Context context,
                                OnSelectDateListener onSelectDateListener,
@@ -302,5 +303,4 @@ public class CalendarViewAdapter extends PagerAdapter {
 
         return false;
     }
-
 }
