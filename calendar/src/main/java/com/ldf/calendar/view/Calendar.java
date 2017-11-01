@@ -3,22 +3,16 @@ package com.ldf.calendar.view;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
-
 import com.ldf.calendar.Const;
-import com.ldf.calendar.interf.IDayRenderer;
-import com.ldf.calendar.interf.OnAdapterSelectListener;
+import com.ldf.calendar.Utils;
 import com.ldf.calendar.component.CalendarAttr;
 import com.ldf.calendar.component.CalendarRenderer;
+import com.ldf.calendar.interf.IDayRenderer;
+import com.ldf.calendar.interf.OnAdapterSelectListener;
 import com.ldf.calendar.interf.OnSelectDateListener;
 import com.ldf.calendar.model.CalendarDate;
-import com.ldf.calendar.Utils;
-import com.ldf.calendar.utils.DrawSelectHelper;
 
 public class Calendar extends View {
     /**
@@ -27,20 +21,16 @@ public class Calendar extends View {
     private CalendarAttr.CalendayType calendarType;
     private int cellHeight; // 单元格高度
     private int cellWidth; // 单元格宽度
-
     private OnSelectDateListener onSelectDateListener;    // 单元格点击回调事件
     private Context context;
     private CalendarAttr calendarAttr;
     private CalendarRenderer renderer;
-
     private OnAdapterSelectListener onAdapterSelectListener;
     private float touchSlop;
-    private DrawSelectHelper pointHelper;
 
-    public Calendar(Context context, OnSelectDateListener onSelectDateListener,DrawSelectHelper _pointHelper) {
+    public Calendar(Context context, OnSelectDateListener onSelectDateListener) {
         super(context);
         this.onSelectDateListener = onSelectDateListener;
-        pointHelper = _pointHelper;
         init(context);
     }
 
@@ -148,8 +138,8 @@ public class Calendar extends View {
         invalidate();
     }
 
-    public void updateSelectWeek(Week selectWeek,int row) {
-        renderer.updateSelectWeek(selectWeek,row);
+    public void updateSelectWeek(Week selectWeek, int row) {
+        renderer.updateSelectWeek(selectWeek, row);
         invalidate();
     }
 

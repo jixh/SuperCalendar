@@ -6,14 +6,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ldf.calendar.DateUtils;
-import com.ldf.calendar.interf.OnAdapterSelectListener;
-import com.ldf.calendar.interf.IDayRenderer;
-import com.ldf.calendar.interf.OnSelectDateListener;
 import com.ldf.calendar.Utils;
-import com.ldf.calendar.utils.DrawSelectHelper;
-import com.ldf.calendar.view.MonthPager;
+import com.ldf.calendar.interf.IDayRenderer;
+import com.ldf.calendar.interf.OnAdapterSelectListener;
+import com.ldf.calendar.interf.OnSelectDateListener;
 import com.ldf.calendar.model.CalendarDate;
 import com.ldf.calendar.view.Calendar;
+import com.ldf.calendar.view.MonthPager;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,8 +29,7 @@ public class CalendarViewAdapter extends PagerAdapter {
     private CalendarAttr.CalendayType calendarType = CalendarAttr.CalendayType.MONTH;
     private int rowCount = 0;
     private CalendarDate seedDate;
-    public static DrawSelectHelper pointHelper;
-    public static boolean canSelect = false;
+    public static boolean canSelect = true;
 
     public CalendarViewAdapter(Context context,
                                OnSelectDateListener onSelectDateListener,
@@ -43,16 +42,13 @@ public class CalendarViewAdapter extends PagerAdapter {
     }
 
     private void init(Context context, OnSelectDateListener onSelectDateListener) {
-
-        pointHelper = new DrawSelectHelper();
-
 //        saveDate(new CalendarDate());
         //初始化的种子日期为今天
         seedDate = new CalendarDate().modifyDay(1);
 
 
         for (int i = 0; i < 3; i++) {
-            Calendar calendar = new Calendar(context, onSelectDateListener,pointHelper);
+            Calendar calendar = new Calendar(context, onSelectDateListener);
             calendar.setOnAdapterSelectListener(new OnAdapterSelectListener() {
                 @Override
                 public void cancelSelectState() {
@@ -295,7 +291,7 @@ public class CalendarViewAdapter extends PagerAdapter {
 
 
     public static boolean isSelect(String date){
-
+        //判断是否已经点击当前行
         if (loadDate()!=null && DateUtils.equalDate(loadDate().toString(),date))return true;
 
         for (CalendarDate cd : selectDates)

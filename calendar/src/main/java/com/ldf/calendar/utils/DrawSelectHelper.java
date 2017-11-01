@@ -12,7 +12,7 @@ import com.ldf.calendar.model.Point;
 
 public class DrawSelectHelper {
 
-    public static final float MAX = 5;
+    private static final float MAX = 10;
 
     private boolean isAnim = false;
 
