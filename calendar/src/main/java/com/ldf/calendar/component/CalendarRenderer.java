@@ -65,7 +65,7 @@ public class CalendarRenderer {
 
                 for (int col = 0; col < Const.TOTAL_COL; col++) {
                     if (weeks[row].days[col] != null) {
-                        dayRenderer.drawDay(canvas, weeks[row].days[col], false);
+                        dayRenderer.drawDay(canvas, weeks[row].days[col], true);
                     }
                 }
             }
