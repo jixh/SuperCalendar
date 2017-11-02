@@ -107,7 +107,8 @@ public class DateUtils {
     }
 
     public static boolean lessThanToday(String date){
-        return compareDate(getToday(),date) < 0;
+        WeekDate weekDate = DateUtils.getWeek(DateUtils.getToday());
+        return compareDate(weekDate.startDay,date) < 0;
     }
 
     public static int diffMonth(String date){
@@ -150,6 +151,18 @@ public class DateUtils {
             e.printStackTrace();
         }
         return result;
+    }
+
+    public static String getFormatDate(String date){
+        String d = date;
+
+        try {
+            d = SDF_DAY.format(SDF_DAY.parse(date));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return d;
     }
 
 }

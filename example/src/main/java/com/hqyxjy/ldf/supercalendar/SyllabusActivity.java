@@ -8,10 +8,10 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ldf.calendar.DateUtils;
 import com.ldf.calendar.Utils;
@@ -48,6 +48,7 @@ public class SyllabusActivity extends AppCompatActivity {
     private Context context;
     private CalendarDate currentDate;
     private boolean initiated = false;
+    private WeekDate updateWeekDate;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -99,9 +100,10 @@ public class SyllabusActivity extends AppCompatActivity {
         themeSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                refreshSelectBackground();
+                add();
             }
         });
+
         nextMonthBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -180,7 +182,17 @@ public class SyllabusActivity extends AppCompatActivity {
             @Override
             public void onSelectDate(CalendarDate date,boolean isExist) {
                 if (isExist)
-                showDialog(date);
+                    showDialog(date);
+                else if (!TextUtils.isEmpty(Utils.pressedStateStartDate)){
+
+                    add();
+
+                    delete(new CalendarDate(updateWeekDate.startDay));
+
+                    Utils.pressedStateStartDate = null;
+
+                    CalendarViewAdapter.canSelect = false;
+                }
             }
 
             @Override
@@ -189,6 +201,16 @@ public class SyllabusActivity extends AppCompatActivity {
                 monthPager.selectOtherMonth(offset);
             }
         };
+    }
+
+    private void add() {
+        if (CalendarViewAdapter.loadDate() == null)return;
+        WeekDate weekDate = DateUtils.getWeek(CalendarViewAdapter.loadDate().toString());
+        Utils.weekDateList.add(weekDate);
+        Utils.setSelectDates();
+        CalendarViewAdapter.saveDate(null);
+
+        calendarAdapter.notifyDataChanged(currentDate);
     }
 
     private void refreshClickDate(CalendarDate date) {
@@ -240,7 +262,7 @@ public class SyllabusActivity extends AppCompatActivity {
     }
 
     private void refreshMonthPager() {
-        CalendarDate today = new CalendarDate("2017-12-02");
+        CalendarDate today = new CalendarDate();
         calendarAdapter.notifyDataChanged(today);
         textViewYearDisplay.setText(today.getYear() + "年");
         textViewMonthDisplay.setText(today.getMonth() + "");
@@ -252,6 +274,7 @@ public class SyllabusActivity extends AppCompatActivity {
         calendarAdapter.notifyDataSetChanged();
         calendarAdapter.notifyDataChanged(new CalendarDate());
     }
+
     private static final String[] items = {"删除","修改"};
 
     public void showDialog(final CalendarDate date){
@@ -263,6 +286,7 @@ public class SyllabusActivity extends AppCompatActivity {
                     delete(date);
                 }else {
                     update(date);
+                    CalendarViewAdapter.canSelect = true;
                 }
             }
         });
@@ -273,14 +297,15 @@ public class SyllabusActivity extends AppCompatActivity {
         WeekDate weekDate = DateUtils.getWeek(date.toString());
         Utils.weekDateList.remove(weekDate);
         Utils.setSelectDates();
-        calendarAdapter.notifyDataSetChanged();
         calendarAdapter.notifyDataChanged(date);
+
+        CalendarViewAdapter.saveDate(null);
     }
 
     public void update(CalendarDate date){
-        WeekDate weekDate = DateUtils.getWeek(date.toString());
-        Utils.pressedStateStartDate = weekDate.startDay;
-        calendarAdapter.notifyDataSetChanged();
+        updateWeekDate = DateUtils.getWeek(date.toString());
+        Utils.pressedStateStartDate = updateWeekDate.startDay;
+//        calendarAdapter.notifyDataSetChanged();
         calendarAdapter.notifyDataChanged(date);
 
     }
