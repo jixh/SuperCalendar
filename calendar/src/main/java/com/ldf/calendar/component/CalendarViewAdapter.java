@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.ldf.calendar.DateUtils;
 import com.ldf.calendar.Utils;
 import com.ldf.calendar.interf.IDayRenderer;
@@ -13,7 +12,6 @@ import com.ldf.calendar.interf.OnSelectDateListener;
 import com.ldf.calendar.model.CalendarDate;
 import com.ldf.calendar.view.Calendar;
 import com.ldf.calendar.view.MonthPager;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

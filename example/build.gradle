@@ -26,4 +26,6 @@ dependencies {
     compile "com.android.support:appcompat-v7:$supportVersion"
     testCompile 'junit:junit:4.12'
     compile project(path: ':calendar')
+
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5.4'
 }

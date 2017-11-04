@@ -1,6 +1,7 @@
 package com.ldf.calendar.utils;
 
 import android.graphics.Canvas;
+import android.util.Log;
 
 import com.ldf.calendar.model.DrawBean;
 import com.ldf.calendar.model.Point;
@@ -34,7 +35,7 @@ public class DrawSelectHelper {
         refreshPoints(col,row);
 
         draw(canvas,isExpire?expireDraw:selectDraw,isAnim?during:Float.valueOf(MAX).intValue());
-
+        Log.e("drawxx","onDrawSelect="+during);
         if (isAnim)
         anim();
 
