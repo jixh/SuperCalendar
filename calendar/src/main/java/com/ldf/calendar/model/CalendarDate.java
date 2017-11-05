@@ -90,14 +90,14 @@ public class CalendarDate implements Serializable {
     }
 
     /**
-     * 通过修改当前Date对象的所在月返回一个修改后的Date
-     *
-     * @return CalendarDate 修改后的日期
+     * 返回相隔 offsetMonth 的日期
+     * @param offsetMonth
+     * @return
      */
-    public CalendarDate modifyMonth(int offset) {
+    public CalendarDate modifyMonth(int offsetMonth) {
         CalendarDate result = new CalendarDate();
-        int addToMonth = this.month + offset;
-        if (offset > 0) {
+        int addToMonth = this.month + offsetMonth;
+        if (offsetMonth > 0) {
             if (addToMonth > 12) {
                 result.setYear(this.year + (addToMonth - 1) / 12);
                 result.setMonth(addToMonth % 12 == 0 ? 12 : addToMonth % 12);

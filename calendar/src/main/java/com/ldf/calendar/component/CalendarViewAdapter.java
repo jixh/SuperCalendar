@@ -289,12 +289,16 @@ public class CalendarViewAdapter extends PagerAdapter {
 
 
     public static boolean isSelect(String date){
-        //判断是否已经点击当前行
-        if (loadDate()!=null && DateUtils.equalDate(loadDate().toString(),date))return true;
 
         for (CalendarDate cd : selectDates)
             if (DateUtils.equalDate(cd.toString(),date))return true;
 
+        return false;
+    }
+
+    public static boolean isPressedSelect(String date){
+        //判断是否已经点击当前行
+        if (loadDate()!=null && DateUtils.equalDate(loadDate().toString(),date))return true;
         return false;
     }
 }

@@ -104,10 +104,10 @@ public class MonthPager extends ViewPager {
             return super.onInterceptTouchEvent(me);
     }
 
-    public void selectOtherMonth(int offset) {
+    public void selectOtherMonth(int offset,CalendarDate currentDate) {
         setCurrentItem(currentPosition + offset);
         CalendarViewAdapter calendarViewAdapter = (CalendarViewAdapter) getAdapter();
-        calendarViewAdapter.notifyDataChanged(new CalendarDate());
+        calendarViewAdapter.notifyDataChanged(currentDate);
     }
 
     public int getPageScrollState() {

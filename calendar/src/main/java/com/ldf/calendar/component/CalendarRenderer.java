@@ -56,9 +56,11 @@ public class CalendarRenderer {
                 for (int col = 0; col < Const.TOTAL_COL; col++) {
                     if (weeks[row].days[col] != null) {
                         if (weeks[row].days[col].getState() == State.SELECT) {
-                            drawSelectHelper.onDrawSelect(canvas, attr.getCellWidth(), attr.getCellHeight(), col, row,
-                                    DateUtils.isExpire(weeks[row].days[col].getDate().toString()),
-                                    weeks[row].days[col].getDate().equals(CalendarViewAdapter.loadDate()));
+                            drawSelectHelper.onDrawSelect(canvas, attr.getCellWidth(), attr.getCellHeight(), col, row,false,true);
+                        }else if (weeks[row].days[col].getState() == State.SELECT_START){
+                            drawSelectHelper.onDrawSelect(canvas, attr.getCellWidth(), attr.getCellHeight(), col, row,false,false);
+                        }else if (weeks[row].days[col].getState() == State.EXPIRE){
+                            drawSelectHelper.onDrawSelect(canvas, attr.getCellWidth(), attr.getCellHeight(), col, row,true,false);
                         }
                     }
                 }
@@ -115,6 +117,11 @@ public class CalendarRenderer {
                         onSelectDateListener.onSelectOtherMonth(-1);
                         onSelectDateListener.onSelectDate(selectedDate, false);
                     } else if (weeks[row].days[col].getState() == State.NEXT_MONTH) {
+
+                        if (!DateUtils.isNotMaxMonth(weeks[row].days[col].getDate().toString())){
+                            return;
+                        }
+
                         selectedDate = weeks[row].days[col].getDate();
                         CalendarViewAdapter.saveDate(selectedDate);
                         onSelectDateListener.onSelectOtherMonth(1);
@@ -210,12 +217,11 @@ public class CalendarRenderer {
     }
 
     /**
-     * 填充月数据
-     *
+     * 填充月数据、
      * @return void
      */
     private void instantiateMonth() {
-        int lastMonthDays = Utils.getMonthDays(seedDate.year, seedDate.month - 1);    // 上个月的天数
+        int lastMonthDays = Utils.getMonthDays(seedDate.year, seedDate.month - 1); // 上个月的天数
         int currentMonthDays = Utils.getMonthDays(seedDate.year, seedDate.month);    // 当前月的天数
         int firstDayPosition = Utils.getFirstDayWeekPosition(
                 seedDate.year,
@@ -265,8 +271,13 @@ public class CalendarRenderer {
         }
 
         if (CalendarViewAdapter.isSelect(date.toString())) {
+            weeks[row].days[col].setState(State.SELECT_START);
+        }else
+        if (CalendarViewAdapter.isPressedSelect(date.toString())) {
             weeks[row].days[col].setState(State.SELECT);
         }
+
+
 
         if (date.equals(seedDate)) {
             selectedRowIndex = row;
@@ -293,8 +304,9 @@ public class CalendarRenderer {
         }
 
 
-        if (CalendarViewAdapter.isSelect(date.toString())) {
-            weeks[row].days[col].setState(State.SELECT);
+        if (col == 0 && CalendarViewAdapter.isSelect(date.toString())) {
+            if (row != 5)
+            weeks[row].days[col].setState(State.SELECT_START);
         }
         // TODO: 17/6/27  当下一个月的天数大于七时，说明该月有六周
 //        if(position - firstDayWeek - currentMonthDays + 1 >= 7) { //当下一个月的天数大于七时，说明该月有六周
@@ -316,9 +328,8 @@ public class CalendarRenderer {
             weeks[row].days[col] = new Day(State.PAST_MONTH, date, row, col);
         }
 
-
         if (CalendarViewAdapter.isSelect(date.toString())) {
-            weeks[row].days[col].setState(State.SELECT);
+            weeks[row].days[col].setState(State.SELECT_START);
         }
     }
 

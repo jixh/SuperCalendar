@@ -35,7 +35,7 @@ public class DrawSelectHelper {
         refreshPoints(col,row);
 
         draw(canvas,isExpire?expireDraw:selectDraw,isAnim?during:Float.valueOf(MAX).intValue());
-        Log.e("drawxx","onDrawSelect="+during);
+        Log.e("drawxx","onDrawSelect="+during+",isAnim="+isAnim);
         if (isAnim)
         anim();
 

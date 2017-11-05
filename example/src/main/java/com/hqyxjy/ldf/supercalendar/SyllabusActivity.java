@@ -98,7 +98,7 @@ public class SyllabusActivity extends AppCompatActivity {
         themeSwitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                add();
+
             }
         });
 
@@ -106,8 +106,9 @@ public class SyllabusActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                if (DateUtils.isNotMaxMonth(currentDate.toString()))
+                if (DateUtils.isNotMaxMonth(currentDate.toString())){
                 monthPager.setCurrentItem(monthPager.getCurrentPosition() + 1);
+                }
                 Log.e("Month","nextdate="+currentDate);
             }
         });
@@ -115,8 +116,9 @@ public class SyllabusActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                if (DateUtils.isNotMinMonth(currentDate.toString()))
-                monthPager.setCurrentItem(monthPager.getCurrentPosition() - 1);
+                if (DateUtils.isNotMinMonth(currentDate.toString())){
+                   monthPager.setCurrentItem(monthPager.getCurrentPosition() - 1);
+                }
 
                 Log.e("Month","lastdate="+currentDate);
 
@@ -189,26 +191,20 @@ public class SyllabusActivity extends AppCompatActivity {
 
                     Utils.pressedStateStartDate = null;
 
-                    CalendarViewAdapter.canSelect = false;
+//                    CalendarViewAdapter.canSelect = false;
                 }
             }
 
             @Override
             public void onSelectOtherMonth(int offset) {
                 //偏移量 -1表示刷新成上一个月数据 ， 1表示刷新成下一个月数据
-                monthPager.selectOtherMonth(offset);
+                if (offset>0 && !DateUtils.isNotMaxMonth(currentDate.toString())){
+                    return;
+                }
+                    monthPager.setCurrentItem(monthPager.getCurrentPosition() + offset);
+//                monthPager.selectOtherMonth(offset,currentDate);
             }
         };
-    }
-
-    private void add() {
-        if (CalendarViewAdapter.loadDate() == null)return;
-        WeekDate weekDate = DateUtils.getWeek(CalendarViewAdapter.loadDate().toString());
-        Utils.weekDateList.add(weekDate);
-        Utils.setSelectDates();
-        CalendarViewAdapter.saveDate(null);
-
-        calendarAdapter.notifyDataChanged(currentDate);
     }
 
     private void refreshClickDate(CalendarDate date) {
@@ -243,9 +239,7 @@ public class SyllabusActivity extends AppCompatActivity {
                 currentCalendars = calendarAdapter.getPagers();
                 if (currentCalendars.get(position % currentCalendars.size()) instanceof Calendar) {
                     CalendarDate date = currentCalendars.get(position % currentCalendars.size()).getSeedDate();
-                    currentDate = date;
-                    textViewYearDisplay.setText(date.getYear() + "年");
-                    textViewMonthDisplay.setText(date.getMonth() + "");
+                    refreshClickDate(date);
                 }
             }
 
@@ -260,10 +254,8 @@ public class SyllabusActivity extends AppCompatActivity {
     }
 
     private void refreshMonthPager() {
-        CalendarDate today = new CalendarDate();
-        calendarAdapter.notifyDataChanged(today);
-        textViewYearDisplay.setText(today.getYear() + "年");
-        textViewMonthDisplay.setText(today.getMonth() + "");
+        refreshClickDate(new CalendarDate());
+        calendarAdapter.notifyDataChanged(currentDate);
     }
 
     private void refreshSelectBackground() {
@@ -308,6 +300,15 @@ public class SyllabusActivity extends AppCompatActivity {
 
     }
 
+    private void add() {
+        if (CalendarViewAdapter.loadDate() == null)return;
+        WeekDate weekDate = DateUtils.getWeek(CalendarViewAdapter.loadDate().toString());
+        Utils.weekDateList.add(weekDate);
+        Utils.setSelectDates();
+        CalendarViewAdapter.saveDate(null);
+
+        calendarAdapter.notifyDataChanged(currentDate);
+    }
 
 
 }
