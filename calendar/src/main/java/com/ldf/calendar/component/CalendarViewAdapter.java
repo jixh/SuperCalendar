@@ -2,6 +2,7 @@ package com.ldf.calendar.component;
 
 import android.content.Context;
 import android.support.v4.view.PagerAdapter;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import com.ldf.calendar.DateUtils;
@@ -299,6 +300,11 @@ public class CalendarViewAdapter extends PagerAdapter {
     public static boolean isPressedSelect(String date){
         //判断是否已经点击当前行
         if (loadDate()!=null && DateUtils.equalDate(loadDate().toString(),date))return true;
+        return false;
+    }
+
+    public static boolean isUpdateSelect(String date){
+        if (!TextUtils.isEmpty(Utils.pressedStateStartDate) && DateUtils.equalDate(Utils.pressedStateStartDate,date))return true;
         return false;
     }
 }

@@ -36,7 +36,7 @@ public class DateUtils {
 
         try {
             cal.setTime(SDF_DAY.parse(date));
-        } catch (ParseException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -97,7 +97,7 @@ public class DateUtils {
 
         try {
             if (SDF_DAY.parse(endDate).getTime() == SDF_DAY.parse(beginDate).getTime()) return  true;
-        } catch (ParseException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -119,7 +119,7 @@ public class DateUtils {
         try {
             c1.setTime(SDF_DAY.parse(date));
             c2.setTime(SDF_DAY.parse(getToday()));
-        } catch (ParseException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -158,7 +158,7 @@ public class DateUtils {
 
         try {
             d = SDF_DAY.format(SDF_DAY.parse(date));
-        } catch (ParseException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

@@ -269,14 +269,16 @@ public class CalendarRenderer {
         } else {
             weeks[row].days[col] = new Day(State.CURRENT_MONTH, date, row, col);
         }
-
-        if (CalendarViewAdapter.isSelect(date.toString())) {
+        if (CalendarViewAdapter.isUpdateSelect(date.toString())) {
+            weeks[row].days[col].setState(State.EXPIRE);
+            Log.e("TAG", "EXPIRE,date=" + date.toString());
+        } else if (CalendarViewAdapter.isSelect(date.toString())) {
             weeks[row].days[col].setState(State.SELECT_START);
-        }else
-        if (CalendarViewAdapter.isPressedSelect(date.toString())) {
+            Log.e("TAG", "SELECT_START,date=" + date.toString());
+        } else if (CalendarViewAdapter.isPressedSelect(date.toString())) {
             weeks[row].days[col].setState(State.SELECT);
+            Log.e("TAG", "SELECT,date=" + date.toString());
         }
-
 
 
         if (date.equals(seedDate)) {
@@ -308,6 +310,9 @@ public class CalendarRenderer {
             if (row != 5)
             weeks[row].days[col].setState(State.SELECT_START);
         }
+
+
+
         // TODO: 17/6/27  当下一个月的天数大于七时，说明该月有六周
 //        if(position - firstDayWeek - currentMonthDays + 1 >= 7) { //当下一个月的天数大于七时，说明该月有六周
 //        }
