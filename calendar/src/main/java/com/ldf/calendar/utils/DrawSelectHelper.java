@@ -3,6 +3,7 @@ package com.ldf.calendar.utils;
 import android.graphics.Canvas;
 import android.util.Log;
 
+import com.ldf.calendar.model.CalendarDate;
 import com.ldf.calendar.model.DrawBean;
 import com.ldf.calendar.model.Point;
 
@@ -13,6 +14,16 @@ import com.ldf.calendar.model.Point;
 
 public class DrawSelectHelper {
 
+    private static DrawSelectHelper instance;
+
+    private DrawSelectHelper() {
+    }
+
+    public static DrawSelectHelper getInstance() {
+        if (instance == null) instance = new DrawSelectHelper();
+        return instance;
+    }
+
     private static final float MAX = 5;
 
     private boolean isAnim = false;
@@ -21,50 +32,50 @@ public class DrawSelectHelper {
 
     private Point[] points = new Point[4];
 
-    private int w, h,margin = 10, radius;
+    private int w, h, margin = 10, radius;
 
-    private static DrawBean selectDraw = new DrawBean("#2eb872","#332eb872");
+    private static DrawBean selectDraw = new DrawBean("#2eb872", "#332eb872");
 
-    private static DrawBean expireDraw =new DrawBean("#cbd2db","#33cbd2db");
+    private static DrawBean expireDraw = new DrawBean("#cbd2db", "#33cbd2db");
 
 
-    public void onDrawSelect(Canvas canvas,int cellWidth,int cellHeight,int col,int row,boolean isExpire,boolean isAnim) {
+    public void onDrawSelect(Canvas canvas, int cellWidth, int cellHeight, int col, int row, boolean isExpire, boolean isAnim) {
 
-        setPoints(cellWidth,cellHeight);
+        setPoints(cellWidth, cellHeight);
 
-        refreshPoints(col,row);
+        refreshPoints(col, row);
 
-        draw(canvas,isExpire?expireDraw:selectDraw,isAnim?during:Float.valueOf(MAX).intValue());
-        Log.e("drawxx","onDrawSelect="+during+",isAnim="+isAnim);
+        draw(canvas, isExpire ? expireDraw : selectDraw, isAnim ? during : Float.valueOf(MAX).intValue());
+        Log.e("drawxx", "onDrawSelect=" + during + ",isAnim=" + isAnim);
         if (isAnim)
-        anim();
+            anim();
 
     }
 
     private void anim() {
-        if (during == MAX){
+        if (during == MAX) {
             setAnim(false);
-        }else {
+        } else {
             during++;
         }
     }
 
-    private void draw(Canvas canvas,DrawBean drawBean,int during){
-        canvas.drawRect(points[0].x + ((points[2].x - points[0].x)/MAX * (MAX -during)),
-                points[0].y-h/2+margin,
-                points[3].x+ ((points[2].x - points[3].x)/MAX * (MAX -during)),
-                points[3].y+h/2-margin,
+    private void draw(Canvas canvas, DrawBean drawBean, int during) {
+        canvas.drawRect(points[0].x + ((points[2].x - points[0].x) / MAX * (MAX - during)),
+                points[0].y - h / 2 + margin,
+                points[3].x + ((points[2].x - points[3].x) / MAX * (MAX - during)),
+                points[3].y + h / 2 - margin,
                 drawBean.rectPaint);
 
-        canvas.drawCircle(points[0].x+((points[2].x - points[0].x)/MAX * (MAX -during)),points[0].y,radius-margin,drawBean.circlePaint);
+        canvas.drawCircle(points[0].x + ((points[2].x - points[0].x) / MAX * (MAX - during)), points[0].y, radius - margin, drawBean.circlePaint);
 
-        canvas.drawCircle(points[3].x+((points[2].x - points[3].x)/MAX * (MAX -during)),points[3].y,radius-margin,drawBean.circlePaint);
+        canvas.drawCircle(points[3].x + ((points[2].x - points[3].x) / MAX * (MAX - during)), points[3].y, radius - margin, drawBean.circlePaint);
     }
 
     private void setPoints(int cellWidth, int cellHeight) {
         w = cellWidth;
         h = cellHeight;
-        radius = cellHeight/2;
+        radius = cellHeight / 2;
     }
 
     private void refreshPoints(int col, int row) {
@@ -93,9 +104,9 @@ public class DrawSelectHelper {
 
         isAnim = anim;
 
-        if (isAnim){
+        if (isAnim) {
             during = 0;
-        }else{
+        } else {
             during = Float.valueOf(MAX).intValue();
         }
 

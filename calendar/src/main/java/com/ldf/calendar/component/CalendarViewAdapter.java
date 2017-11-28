@@ -11,6 +11,7 @@ import com.ldf.calendar.interf.IDayRenderer;
 import com.ldf.calendar.interf.OnAdapterSelectListener;
 import com.ldf.calendar.interf.OnSelectDateListener;
 import com.ldf.calendar.model.CalendarDate;
+import com.ldf.calendar.model.WeekDate;
 import com.ldf.calendar.view.Calendar;
 import com.ldf.calendar.view.MonthPager;
 import java.util.ArrayList;
@@ -21,8 +22,9 @@ public class CalendarViewAdapter extends PagerAdapter {
     //周排列方式 1：代表周日显示为本周的第一天
     //0:代表周一显示为本周的第一天
     public static int weekArrayType = 0;
-    private static CalendarDate date;
+    private static CalendarDate selectDate;
     private static List<CalendarDate> selectDates = new ArrayList<>();
+    private static List<CalendarDate> selectEndDates = new ArrayList<>();
     private ArrayList<Calendar> calendars = new ArrayList<>();
     private int currentPosition;
     private CalendarAttr.CalendayType calendarType = CalendarAttr.CalendayType.MONTH;
@@ -44,7 +46,6 @@ public class CalendarViewAdapter extends PagerAdapter {
 //        saveDate(new CalendarDate());
         //初始化的种子日期为今天
         seedDate = new CalendarDate().modifyDay(1);
-
 
         for (int i = 0; i < 3; i++) {
             Calendar calendar = new Calendar(context, onSelectDateListener);
@@ -205,7 +206,7 @@ public class CalendarViewAdapter extends PagerAdapter {
 
     public void notifyDataChanged(CalendarDate date) {
         seedDate = date;
-//        saveDate(date);
+//        saveDate(selectDate);
         if (calendarType == CalendarAttr.CalendayType.WEEK) {
             MonthPager.CURRENT_DAY_INDEX = currentPosition;
             Calendar v1 = calendars.get(currentPosition % 3);
@@ -248,11 +249,11 @@ public class CalendarViewAdapter extends PagerAdapter {
     }
 
     public static void saveDate(CalendarDate calendarDate) {
-        date = calendarDate;
+        selectDate = calendarDate;
     }
 
-    public static CalendarDate loadDate() {
-        return date;
+    public static CalendarDate getSelectDate() {
+        return selectDate;
     }
 
     public CalendarAttr.CalendayType getCalendarType() {
@@ -279,27 +280,49 @@ public class CalendarViewAdapter extends PagerAdapter {
         return selectDates;
     }
 
-
-    public static void addSelectDate(String d){
-         CalendarViewAdapter.selectDates.add(new CalendarDate(d));
+    public static List<CalendarDate> getSelectEndDates() {
+        return selectEndDates;
     }
 
-    public static boolean removeDate(CalendarDate calendarDate){
-        return CalendarViewAdapter.selectDates.remove(calendarDate);
+    public static boolean isSelectDateStart(String date){
+
+        if (getSelectDate()!= null){
+
+            WeekDate week = DateUtils.getWeek(getSelectDate().toString());
+
+            if (DateUtils.equalDate(week.startDay,date))return true;
+        }
+
+        return false;
     }
 
+    public static boolean isSelectDateEnd(String date){
 
-    public static boolean isSelect(String date){
+        if (getSelectDate()!= null){
 
+            WeekDate week = DateUtils.getWeek(getSelectDate().toString());
+
+            if (DateUtils.equalDate(week.endDay,date))return true;
+        }
+
+        return false;
+    }
+
+    public static boolean isSelectStart(String date){
         for (CalendarDate cd : selectDates)
             if (DateUtils.equalDate(cd.toString(),date))return true;
+        return false;
+    }
 
+    public static boolean isSelectEnd(String date){
+        for (CalendarDate cd : selectEndDates)
+            if (DateUtils.equalDate(cd.toString(),date))return true;
         return false;
     }
 
     public static boolean isPressedSelect(String date){
         //判断是否已经点击当前行
-        if (loadDate()!=null && DateUtils.equalDate(loadDate().toString(),date))return true;
+        if (getSelectDate()!=null && DateUtils.equalDate(getSelectDate().toString(),date))return true;
         return false;
     }
 

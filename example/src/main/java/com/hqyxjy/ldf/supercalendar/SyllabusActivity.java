@@ -159,7 +159,7 @@ public class SyllabusActivity extends AppCompatActivity {
         Utils.weekDateList.add(new WeekDate("2017-10-9","2017-10-15"));
         Utils.weekDateList.add(new WeekDate("2017-10-23","2017-10-29"));
         Utils.weekDateList.add(new WeekDate("2017-10-30","2017-11-5"));
-        Utils.weekDateList.add(new WeekDate("2017-11-6","2017-11-12"));
+        Utils.weekDateList.add(new WeekDate("2017-12-04","2017-12-10"));
         Utils.setSelectDates();
     }
 
@@ -301,8 +301,8 @@ public class SyllabusActivity extends AppCompatActivity {
     }
 
     private void add() {
-        if (CalendarViewAdapter.loadDate() == null)return;
-        WeekDate weekDate = DateUtils.getWeek(CalendarViewAdapter.loadDate().toString());
+        if (CalendarViewAdapter.getSelectDate() == null)return;
+        WeekDate weekDate = DateUtils.getWeek(CalendarViewAdapter.getSelectDate().toString());
         Utils.weekDateList.add(weekDate);
         Utils.setSelectDates();
         CalendarViewAdapter.saveDate(null);

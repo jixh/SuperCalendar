@@ -10,6 +10,7 @@ import com.ldf.calendar.Utils;
 import com.ldf.calendar.component.State;
 import com.ldf.calendar.interf.IDayRenderer;
 import com.ldf.calendar.model.CalendarDate;
+import com.ldf.calendar.utils.DrawSelectHelper;
 import com.ldf.calendar.view.DayView;
 
 /**
@@ -18,11 +19,14 @@ import com.ldf.calendar.view.DayView;
 
 public class CustomDayView extends DayView {
 
+    public static final int COLOR_CURRENT = Color.parseColor("#3c4350");
+    public static final int COLOR_NEXT_PAST = Color.parseColor("#bcc0c8");
+    public static final int selectColor = Color.parseColor("#FFFFFF");
+
     private TextView dateTv;
     private ImageView marker;
     private View selectedBackground;
     private View todayBackground;
-    public static final int selectColor = Color.parseColor("#FFFFFF");
     private final CalendarDate today = new CalendarDate();
 
     /**
@@ -65,26 +69,30 @@ public class CustomDayView extends DayView {
     }
 
     private void renderSelect(State state) {
-        if (state == State.SELECT) {
+
+        if (state == State.EXPIRE ||state == State.SD_START || state == State.SD_END||state == State.SELECT_START || state == State.SELECT_END ) {
             selectedBackground.setVisibility(GONE);
-            dateTv.setTextColor(Color.parseColor("#3c4350"));
-        } else if (state == State.NEXT_MONTH || state == State.PAST_MONTH) {
+            dateTv.setTextColor(selectColor);
+        }
+        else if (state == State.SELECT_DATE_START ||state == State.SELECT_DATE_END ) {
             selectedBackground.setVisibility(GONE);
-            dateTv.setTextColor(Color.parseColor("#bcc0c8"));
+            dateTv.setTextColor(DrawSelectHelper.getInstance().isAnim()?COLOR_CURRENT:selectColor);
+        }
+        else if (state == State.SELECT) {
+            selectedBackground.setVisibility(GONE);
+            dateTv.setTextColor(COLOR_CURRENT);
+        }
+        else if (state == State.NEXT_MONTH || state == State.PAST_MONTH) {
+            selectedBackground.setVisibility(GONE);
+            dateTv.setTextColor(COLOR_NEXT_PAST);
         } else {
             selectedBackground.setVisibility(GONE);
-            dateTv.setTextColor(Color.parseColor("#3c4350"));
+            dateTv.setTextColor(COLOR_CURRENT);
         }
     }
 
     private void renderToday(CalendarDate date) {
-
         if (date != null) {
-
-            if (Utils.isSelectDay(date.toString())){
-                dateTv.setTextColor(selectColor);
-            }
-
             if (date.equals(today)) {
                 dateTv.setText("今");
                 todayBackground.setVisibility(VISIBLE);

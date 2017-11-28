@@ -5,5 +5,15 @@ package com.ldf.calendar.component;
  */
 
 public enum State {
-    CURRENT_MONTH, PAST_MONTH, NEXT_MONTH, SELECT,SELECT_START,SELECT_END, EXPIRE
+    CURRENT_MONTH,
+    PAST_MONTH,
+    NEXT_MONTH,
+    SELECT,
+    SELECT_START,
+    SELECT_END,
+    EXPIRE,
+    SELECT_DATE_START,
+    SELECT_DATE_END,
+    SD_START,
+    SD_END
 }

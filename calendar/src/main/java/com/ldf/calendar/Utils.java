@@ -10,7 +10,6 @@ import android.content.Context;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.widget.Scroller;
@@ -18,7 +17,6 @@ import android.widget.Scroller;
 import com.ldf.calendar.component.CalendarViewAdapter;
 import com.ldf.calendar.model.CalendarDate;
 import com.ldf.calendar.model.WeekDate;
-import com.ldf.calendar.view.Day;
 import com.ldf.calendar.view.MonthPager;
 
 import java.text.ParseException;
@@ -42,8 +40,10 @@ public final class Utils {
      */
     public static void setSelectDates() {
         CalendarViewAdapter.getSelectDates().clear();
+        CalendarViewAdapter.getSelectEndDates().clear();
         for (WeekDate wd : weekDateList) {
-            CalendarViewAdapter.addSelectDate(wd.startDay);
+            CalendarViewAdapter.getSelectDates().add(new CalendarDate(wd.startDay));
+            CalendarViewAdapter.getSelectEndDates().add(new CalendarDate(wd.endDay));
         }
     }
 
@@ -54,11 +54,11 @@ public final class Utils {
      * @return
      */
     public static boolean isSelectDay(String date) {
-
-        if (CalendarViewAdapter.loadDate() != null){
-            WeekDate weekDate = DateUtils.getWeek(CalendarViewAdapter.loadDate().toString());
+             if (CalendarViewAdapter.getSelectDate() != null){
+            WeekDate weekDate = DateUtils.getWeek(CalendarViewAdapter.getSelectDate().toString());
             if (DateUtils.equalDate(weekDate.startDay, date) || DateUtils.equalDate(weekDate.endDay, date))return true;
         }
+
 
         for (WeekDate wd : weekDateList) {
             if (DateUtils.equalDate(wd.startDay, date) || DateUtils.equalDate(wd.endDay, date))
