@@ -53,13 +53,12 @@ public class CalendarRenderer {
 
                 for (int col = 0; col < Const.TOTAL_COL; col++) {
                     if (weeks[row].days[col] != null) {
-                        if (weeks[row].days[col].getState() == State.SELECT||weeks[row].days[col].getState() == State.SD_END||weeks[row].days[col].getState() == State.SD_START) {
-                            DrawSelectHelper.getInstance().onDrawSelect(canvas, attr.getCellWidth(), attr.getCellHeight(), col, row,false,true);
-                        }
-                        else if (weeks[row].days[col].getState() == State.SELECT_START){
-                            DrawSelectHelper.getInstance().onDrawSelect(canvas, attr.getCellWidth(), attr.getCellHeight(), col, row,false,false);
-                        }else if (weeks[row].days[col].getState() == State.EXPIRE){
-                            DrawSelectHelper.getInstance().onDrawSelect(canvas, attr.getCellWidth(), attr.getCellHeight(), col, row,true,false);
+                        if (weeks[row].days[col].getState() == State.SELECT || weeks[row].days[col].getState() == State.SD_END || weeks[row].days[col].getState() == State.SD_START) {
+                            DrawSelectHelper.getInstance().onDrawSelect(canvas, attr.getCellWidth(), attr.getCellHeight(), col, row, false, true);
+                        } else if (weeks[row].days[col].getState() == State.SELECT_START) {
+                            DrawSelectHelper.getInstance().onDrawSelect(canvas, attr.getCellWidth(), attr.getCellHeight(), col, row, false, false);
+                        } else if (weeks[row].days[col].getState() == State.EXPIRE) {
+                            DrawSelectHelper.getInstance().onDrawSelect(canvas, attr.getCellWidth(), attr.getCellHeight(), col, row, true, false);
                         }
                     }
                 }
@@ -104,15 +103,16 @@ public class CalendarRenderer {
 
                 } else if (CalendarViewAdapter.canSelect) {
 
-                    if (weeks[row].days[col].getState() == State.CURRENT_MONTH) {
+                    if (weeks[row].days[col].getState() == State.CURRENT_MONTH||weeks[row].days[col].getState() == State.SD_START||weeks[row].days[col].getState() == State.SD_END||weeks[row].days[col].getState() == State.SELECT_DATE_START||weeks[row].days[col].getState() == State.SELECT_DATE_END) {
 //                        weeks[row].days[col].setState(State.SELECT);
                         selectedDate = weeks[row].days[col].getDate();
-
-                        setState(row,col,selectedDate);
-                        if (col > 0 && col < 6){
-                            setSelectState(row,0,State.SELECT_DATE_START);
-                            setSelectState(row,6,State.SELECT_DATE_END);
-                        }
+//
+//                        setState(row,col,selectedDate);
+//                        if (col > 0 && col < 6){
+//                            setSelectState(row,0,State.SELECT_DATE_START);
+//                            setSelectState(row,6,State.SELECT_DATE_END);
+//                        }
+                        Log.e("SelectState","draw="+selectedDate);
 
                         CalendarViewAdapter.saveDate(selectedDate);
                         onSelectDateListener.onSelectDate(selectedDate, false);
@@ -148,9 +148,9 @@ public class CalendarRenderer {
 
     }
 
-    private void setSelectState(int row,int col,State state){
-        if (weeks[row].days[col]!= null)weeks[row].days[col].setState(state);
-    }
+//    private void setSelectState(int row,int col,State state){
+//        if (weeks[row].days[col]!= null)weeks[row].days[col].setState(state);
+//    }
 
     private void setState(int row, int col, CalendarDate date) {
         if (CalendarViewAdapter.isUpdateSelect(date.toString())) {
