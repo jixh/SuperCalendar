@@ -108,7 +108,7 @@ public class DateUtils {
 
     public static boolean lessThanToday(String date){
         WeekDate weekDate = DateUtils.getWeek(DateUtils.getToday());
-        return compareDate(weekDate.startDay,date) < 0;
+        return compareDate(weekDate.endDay,date) < 0;
     }
 
     public static int diffMonth(String date){
